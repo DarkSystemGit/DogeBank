@@ -12,7 +12,10 @@ export class Database {
     }
     getEntry(name) {
         this.writeDB()
-        return name.split('.').reduce((prev, cur) => prev[cur], this.db)
+        return name.split('.').reduce((prev, cur) => {
+            if((typeof prev[cur]=='string')&&prev[cur].includes('${')&&prev[cur].includes('}')){return this.getEntry(prev[cur])}
+            return prev[cur]
+        }, this.db)
     }
     update() {
         this.create(...arguments)
@@ -21,11 +24,15 @@ export class Database {
         name.split('.').reduce((prev, cur, i) => {
             prev[cur] = prev[cur] || {};
             if (i == name.split('.').length - 1) {
+                if((typeof prev[cur]=='string')&&prev[cur].includes('${')&&prev[cur].includes('}')){return this.create(prev[cur],value);}
                 prev[cur] = value
                 return;
             }; return prev[cur]
         }, this.db)
         this.writeDB()
+    }
+    remove(name){
+        this.create(name,undefined)
     }
     writeDB() {
         fs.writeFileSync(this.file, JSON.stringify(this.db))
@@ -33,11 +40,16 @@ export class Database {
     exists() {
         return !!this.loaded
     }
+    createLink(from,to ){
+        this.create(from,`\${${to}}`)
+    }
 }
 export class Account {
     constructor(account, database) {
-        this.account = account||{name:'',sessions:[],balance:0,login}
+        this.account = account||{name:'',sessions:[],balance:0,login:''}
         this.db = database
+        database.createLink('logins.'+account.name,'accounts.' + account.name+'.login')
+        
     }
     serialize() {
         this.db.create('accounts.' + this.account.name, this.account)
@@ -61,4 +73,5 @@ export class Account {
         hash.update(pass)
         return this.account.login==hash.digest('hex')
     }
+
 }
