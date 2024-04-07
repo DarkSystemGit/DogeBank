@@ -1,1 +1,34 @@
-{"logins":{"Bob":"${accounts.Bob.login}"},"accounts":{"Bob":{"name":"Bob","balance":100,"sessions":[],"login":"abc123"}},"${accounts":{"Bob":{"login}":"${accounts.Bob.login}"}}}
+{
+    "logins": {
+        "Bob": "${accounts.Bob.login}"
+    },
+    "accounts": {
+        "Bob": {
+            "name": "Bob",
+            "balance": 100,
+            "sessions": [],
+            "login": "c70b5dd9ebfb6f51d09d4132b7170c9d20750a7852f00680f65658f0310e810056e6763c34c9a00b0e940076f54495c169fc2302cceb312039271c43469507dc"
+        }
+    },
+    "products": {
+        "jim": {
+            "name": "jim",
+            "cost": 5,
+            "img": "",
+            "desc": "A human named Jim",
+            "stock": 5
+        }
+    },
+    "companies": {
+        "JimCo": {
+            "name": "JimCo",
+            "stockholders": {
+                "Bob": "${accounts.Bob}"
+            },
+            "products": {
+                "jim": "${products.jim}"
+            },
+            "stockprice": 0
+        }
+    }
+}
