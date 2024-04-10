@@ -1,10 +1,18 @@
 import * as fs from 'fs'
 import * as crypto from 'crypto'
+import fuzzysort from 'fuzzysort'
+import * as msgpack from 'msgpackr'
+function genUUID() {
+    var bytes = crypto.randomBytes(16);
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    return bytes.toString('hex');
+}
 export class Database {
     constructor(path, schema) {
         if (fs.existsSync(path)) {
             this.loaded = true
-            this.db = JSON.parse(fs.readFileSync(path))
+            this.db = msgpack.unpack(fs.readFileSync(path))
         } else {
             this.db = schema || {}
         }
@@ -13,7 +21,7 @@ export class Database {
     getEntry(name) {
         this.writeDB()
         return name.split('.').reduce((prev, cur) => {
-            
+
             if ((typeof prev[cur] == 'string') && prev[cur].includes('${') && (prev[cur][prev[cur].length - 1] == '}')) {
                 return this.getEntry(prev[cur].replaceAll('${', '').slice(0, -1))
             }
@@ -27,7 +35,7 @@ export class Database {
         name.split('.').reduce((prev, cur, i) => {
             prev[cur] = prev[cur] || {};
             if (i == name.split('.').length - 1) {
-                
+
                 if ((typeof prev[cur] == 'string') && prev[cur].includes('${') && (prev[cur][prev[cur].length - 1] == '}')) { return this.create(prev[cur].replaceAll('${', '').slice(0, -1), value); }
                 prev[cur] = value
                 return;
@@ -39,19 +47,36 @@ export class Database {
         this.create(name, undefined)
     }
     writeDB() {
-        fs.writeFileSync(this.file, JSON.stringify(this.db))
+        fs.writeFileSync(this.file, msgpack.pack(this.db))
     }
     exists() {
         return !!this.loaded
     }
     createLink(from, to) {
-       
-        if (!(this.db[from.split('.')[0]])||(this.getEntry(from) != `\${${to}}`)) this.create(from, `\${${to}}`)
+
+        if (!(this.db[from.split('.')[0]]) || (this.getEntry(from) != `\${${to}}`)) this.create(from, `\${${to}}`)
+    }
+    search(path, term, options) {
+        var entry = this.getEntry(path)
+        var results = []
+        if (options.key) {
+
+            var keys = fuzzysort.go(term, Object.values(entry), { key: options.key, limit: options.amount })
+            keys.forEach((key) => {
+                results.push(key.obj)
+            })
+        } else {
+            var keys = fuzzysort.go(term, Object.keys(entry), { limit: options.amount })
+            keys.forEach((key) => {
+                results.push(entry[key.target])
+            })
+        }
+        return results
     }
 }
 export class Account {
     constructor(account, database) {
-        this.account = account || { name: '', sessions: [], balance: 0, login: '' }
+        this.account = account || { name: '', sessions: [], balance: 0, login: '', icon: '' }
         this.db = database
         database.createLink('logins.' + account.name, 'accounts.' + account.name + '.login')
 
@@ -68,6 +93,7 @@ export class Account {
         sessionKey = bytes.toString('hex');
         this.account.sessions.push(sessionKey)
         this.serialize()
+        return sessionKey
     }
     setLogin(pass) {
         var hash = crypto.createHash('sha512')
@@ -85,6 +111,8 @@ export class Account {
 export class Product {
     constructor(prod, database) {
         this.product = prod || { name: '', cost: 0, img: '', desc: '', stock: 0 }
+        this.product.id=genUUID()
+        database.createLink('prodIds.'+this.product.id,'products.' + this.product.name)
         this.db = database
         this.serialize()
     }
@@ -96,7 +124,7 @@ export class Product {
             this.product.stock--
             account.setBalance(this.product.cost * -1)
             this.serialize()
-        } return 'out'
+        } return false
     }
     getListing() {
         var prod = this.product
@@ -120,7 +148,7 @@ export class Company {
         this.company.stockPrice += price
     }
     addOwner(account) {
-        this.db.createLink('companies.' + this.company.name+'.stockholders.'+account.account.name,'accounts.'+account.account.name)
+        this.db.createLink('companies.' + this.company.name + '.stockholders.' + account.account.name, 'accounts.' + account.account.name)
     }
     removeProduct(name) {
         delete this.company.products[name]
