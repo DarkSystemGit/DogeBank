@@ -9,8 +9,12 @@ const rl = readline.createInterface({
   });
 var handler=async function(txt){
     txt=txt.split(' ')
-    
-    try{await rpc.sendMsg(channel,txt[0],...txt.slice(1))}catch(e){console.log(e)}
+    var args=txt.slice(1)
+    args.forEach((arg,i) => {
+      if(arg.includes('{')||arg.includes('['))args[i]=JSON.parse(arg)
+      if(/^-?\d+\.?\d*$/.test(arg))args[i]=parseFloat(arg)
+    });
+    try{console.log(await rpc.sendMsg(channel,txt[0],...args))}catch(e){console.log(e)}
     console.log('\n')
     rl.question('>',handler)
 }

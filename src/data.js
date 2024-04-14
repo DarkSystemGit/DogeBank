@@ -78,13 +78,14 @@ export class Account {
     constructor(account, database) {
         this.account = account || { name: '', sessions: [], balance: 0, login: '', icon: '' }
         this.db = database
-        database.createLink('logins.' + account.name, 'accounts.' + account.name + '.login')
+        
+        if(!this.db.db.accounts.hasOwnProperty(account.name))database.createLink('logins.' + account.name, 'accounts.' + account.name + '.login')
 
     }
     serialize() {
         this.db.create('accounts.' + this.account.name, this.account)
     }
-    setBalance(balance) { this.accounts.balance += balance; this.serialize() }
+    setBalance(balance) { this.account.balance += balance; this.serialize() }
     generateSession() {
         var sessionKey;
         var bytes = crypto.randomBytes(16);
@@ -111,8 +112,8 @@ export class Account {
 export class Product {
     constructor(prod, database) {
         this.product = prod || { name: '', cost: 0, img: '', desc: '', stock: 0 }
-        this.product.id=genUUID()
-        database.createLink('prodIds.'+this.product.id,'products.' + this.product.name)
+        this.product.id=this.product.id||genUUID()
+        if(!database.db.products.hasOwnProperty(prod.name))database.createLink('prodIds.'+this.product.id,'products.' + this.product.name)
         this.db = database
         this.serialize()
     }
@@ -120,7 +121,7 @@ export class Product {
         this.db.create('products.' + this.product.name, this.product)
     }
     buy(account) {
-        if (this.product.stock == 0) {
+        if (!this.product.stock == 0) {
             this.product.stock--
             account.setBalance(this.product.cost * -1)
             this.serialize()

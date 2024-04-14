@@ -1,0 +1,43 @@
+{
+    "logins": {
+      "Jim": "${accounts.Jim.login}",
+      "Bob": "${accounts.Bob.login}"
+    },
+    "accounts": {
+      "Jim": {
+        "name": "Jim",
+        "icon": "sgdggsegedgbedhsdeg",
+        "balance": 0,
+        "sessions": [
+          
+        ],
+        "login": "f0f14f8057cfd32bef94bf31258924aebe596f9873a74cf73f0cb4fcc1a44ffaced6d3cff16813d184fa34d69ae2086777a31a2464345033004885e1e69f021b"
+      },
+      "Bob": {
+        "name": "Bob",
+        "balance": 0,
+        "sessions": [
+          
+        ],
+        "login": "f0f14f8057cfd32bef94bf31258924aebe596f9873a74cf73f0cb4fcc1a44ffaced6d3cff16813d184fa34d69ae2086777a31a2464345033004885e1e69f021b"
+      }
+    },
+    "companies": {
+      "testCo": {
+        "name": "testCo",
+        "stockholders": {
+          "Bob": "${accounts.Bob}"
+        },
+        "products": {
+          "testProduct": "${products.testProduct}"
+        },
+        "stockPrice": 0
+      }
+    },
+    "prodIds": {
+      "fe116abbe8c042bd868563b5879951d6": "${products.testProduct}"
+    },
+    "products": {
+      "testProduct": "${products.testProduct}"
+    }
+  }
