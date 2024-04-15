@@ -93,6 +93,7 @@ export class Account {
         bytes[8] = (bytes[8] & 0x3f) | 0x80;
         sessionKey = bytes.toString('hex');
         this.account.sessions.push(sessionKey)
+        this.db.create('sessions.'+sessionKey,this.account.name)
         this.serialize()
         return sessionKey
     }
@@ -121,10 +122,11 @@ export class Product {
         this.db.create('products.' + this.product.name, this.product)
     }
     buy(account) {
-        if (!this.product.stock == 0) {
+        if ((!this.product.stock == 0)&&(account.account.balance>=this.product.cost) ) {
             this.product.stock--
             account.setBalance(this.product.cost * -1)
             this.serialize()
+            return true
         } return false
     }
     getListing() {

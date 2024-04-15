@@ -7,7 +7,7 @@
       "Jim": {
         "name": "Jim",
         "icon": "sgdggsegedgbedhsdeg",
-        "balance": 0,
+        "balance": 50,
         "sessions": [
           
         ],
@@ -38,6 +38,6 @@
       "fe116abbe8c042bd868563b5879951d6": "${products.testProduct}"
     },
     "products": {
-      "testProduct": "${products.testProduct}"
+      "testProduct": { "name": "testProduct", "cost": 5.25, "img": "fdgga", "desc": "TestProduct", "stock": 10,"id":"fe116abbe8c042bd868563b5879951d6" }
     }
   }
