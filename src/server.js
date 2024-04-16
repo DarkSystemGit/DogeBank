@@ -8,10 +8,12 @@ var getUser=(session) => {
     console.log(sessions)
     return db.getEntry('accounts.'+sessions[session])
 }
-rpc.on('createUser', (name, password,icon,email) => {
+var createUser=(name, password,icon,email) => {
     var user = new data.Account({ name, icon, balance: 0, sessions: [], login: '',email }, db)
     user.setLogin(password)
-})
+}
+rpc.on('createUser',createUser)
+rpc.on('editUser',createUser)
 rpc.on('removeUser',(name)=>{
     db.remove(`accounts.${name}`)
 })
@@ -30,6 +32,13 @@ rpc.on('login', (name, login) => {
     } catch {
         return false
     }
+})
+rpc.on('signout',(session)=>{
+    var user = new data.Account(getUser(session), db)
+    user.sessions.filter(e => e !== session)
+    user.serialize()
+    delete sessions[session]
+    db.writeDB()
 })
 rpc.on('createCompany', (name, users) => {
     var comp = new data.Company({ name, stockholders: {}, products: {}, stockPrice: 0 }, db)
@@ -52,5 +61,16 @@ rpc.on('exchange',(amount,type)=>{
     //Type 1 means from USD to DogeCoins
     //Type 2 is the opposite
     
+})
+rpc.on('transfer',(session,to,amount)=>{
+    var user = new data.Account(getUser(session), db)
+    var to = new data.Account(db.getEntry('accounts.'+to), db)
+    to.setBalance(amount)
+    user.setBalance(-1*amount)
+})
+rpc.on('list',(type,amount)=>{
+    var res=db.getEntry(type)
+    if(res.length>amount)res=res.slice(0,amount)
+    return res
 })
 rpc.create(8080)
