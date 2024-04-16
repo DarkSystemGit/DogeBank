@@ -78,8 +78,8 @@ export class Account {
     constructor(account, database) {
         this.account = account || { name: '', sessions: [], balance: 0, login: '', icon: '' }
         this.db = database
-        
-        if(!this.db.db.accounts.hasOwnProperty(account.name))database.createLink('logins.' + account.name, 'accounts.' + account.name + '.login')
+        this.account.cart = this.account.cart || {}
+        if (!this.db.db.accounts.hasOwnProperty(account.name)) database.createLink('logins.' + account.name, 'accounts.' + account.name + '.login')
 
     }
     serialize() {
@@ -93,7 +93,7 @@ export class Account {
         bytes[8] = (bytes[8] & 0x3f) | 0x80;
         sessionKey = bytes.toString('hex');
         this.account.sessions.push(sessionKey)
-        this.db.create('sessions.'+sessionKey,this.account.name)
+        this.db.create('sessions.' + sessionKey, this.account.name)
         this.serialize()
         return sessionKey
     }
@@ -108,23 +108,31 @@ export class Account {
         hash.update(pass)
         return this.account.login == hash.digest('hex')
     }
-
+    getCart() { return this.account.cart }
+    removeProductfromCart(id) {
+        delete this.account.cart[id]
+        this.serialize()
+    }
 }
 export class Product {
     constructor(prod, database) {
         this.product = prod || { name: '', cost: 0, img: '', desc: '', stock: 0 }
-        this.product.id=this.product.id||genUUID()
-        if(!database.db.products.hasOwnProperty(prod.name))database.createLink('prodIds.'+this.product.id,'products.' + this.product.name)
+        this.product.id = this.product.id || genUUID()
+        if (!database.db.products.hasOwnProperty(prod.name)) database.createLink('prodIds.' + this.product.id, 'products.' + this.product.name)
         this.db = database
         this.serialize()
     }
     serialize() {
         this.db.create('products.' + this.product.name, this.product)
     }
-    buy(account) {
-        if ((!this.product.stock == 0)&&(account.account.balance>=this.product.cost) ) {
-            this.product.stock--
-            account.setBalance(this.product.cost * -1)
+    buy(account, amount) {
+        if ((!this.product.stock == 0) && (account.account.balance >= this.product.cost)) {
+            this.product.stock = this.product.stock - amount
+            account.account.cart[this.product.id] = { name: this.product.name, amount }
+            account.setBalance((this.product.cost * amount) * -1)
+            var comp=new Company(this.db.getEntry(this.product.company),this.db)
+            comp.addOrder({id:this.product.id,amount})
+            comp.updateStock(this.product.cost * amount)
             this.serialize()
             return true
         } return false
@@ -141,20 +149,44 @@ export class Company {
     constructor(company, database) {
         this.company = company || { name: '', stockholders: {}, products: {}, stockPrice: 0 }
         this.db = database
+        this.company.orders=[]||this.company.orders
+        this.company.stocks=this.company.stocks||0
         this.serialize()
     }
     createProduct(product) {
+        product.company=`\${companies.${this.company.name}}`
         new Product(product, this.db)
         this.company.products[product.name] = `\${products.${product.name}}`
     }
     updateStock(price) {
         this.company.stockPrice += price
     }
+    buyStock(account,amount){
+        var price=this.company.stockPrice/this.company.stocks
+        account.setBalance((price * amount) * -1)
+        this.company.stocks+=amount
+        this.company.stocksPrice+=price * amount
+        this.serialize()
+    }
+    sellStock(account,amount){
+        var price=this.company.stockPrice/(this.company.stocks-amount)
+        account.setBalance((price * amount))
+        this.company.stocks-=amount
+        this.company.stocksPrice-=price * amount
+        this.serialize()
+    }
     addOwner(account) {
         this.db.createLink('companies.' + this.company.name + '.stockholders.' + account.account.name, 'accounts.' + account.account.name)
+        this.buyStock(account,1)
+        this.serialize()
+    }
+    addOrder(obj){
+        this.orders.push(obj)
+        this.serialize()
     }
     removeProduct(name) {
         delete this.company.products[name]
+        this.serialize()
     }
     serialize() {
         this.db.create('companies.' + this.company.name, this.company)
