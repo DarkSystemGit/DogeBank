@@ -1,52 +1,43 @@
-import { LitElement, css, html } from 'lit';
-
+import { LitElement, html } from "lit";
+import { importedStyle } from './util.js'
 export class Navbar extends LitElement {
     static properties = {
-        name: {},
+        links: {},
     };
-    // Define scoped styles right with your component, in plain CSS
-    static styles = css`
-    :host {
-      color: blue;
-    }
-  `;
+
 
     constructor() {
         super();
         // Declare reactive properties
-        this.links = {};
+        this.links = { bank: '/bank', stocks: '/stocks', shop: '/shop', account: '/account' };
     }
 
     // Render the UI as a function of component state
     render() {
+
         return html`
-    <nav class="left m l medium-space">
-        <img src="./imgs/roundedLogo.png" alt="logo"></img>
-        <a href="${this.links.bank}"></a>>
+        ${importedStyle(document)}
+    <nav class="left m l surface-variant round large-blur min">
+        <header class="top-padding"><img src="/img/LogoSmall.png" alt="logo" class="round large"></img></header>
+        <a href="${this.links.bank}">
             <i class="fa-solid fa-building-columns"></i>
             <p>Bank</p>
         </a>
-        <a href="${this.links.stocks}"></a>>
+        <a href="${this.links.stocks}">
             <i class="fa-solid fa-arrow-trend-up"></i>
             <p>Stocks</p>
         </a>
-        <a href="${this.links.shop}"></a>>
+        <a href="${this.links.shop}">
             <i class="fa-solid fa-bag-shopping"></i>
             <p>Shop</p>
         </a>
-        <a href="${this.links.account}"></a>>
+        <a href="${this.links.account}">
             <i class="fa-solid fa-circle-user"></i>
             <p>Account</p>
         </a>
     </nav>
-    <button>  
-    <i class="fa-solid fa-bars"></i>
-    <menu>
-        <a>Item 1</a>
-        <a>Item 2</a>
-        <a>Item 3</a>
-    </menu>
-</button>
+    <main class="responsive"><slot></slot></main>
+    
     `;
 
     }

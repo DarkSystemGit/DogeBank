@@ -1,4 +1,4 @@
-import {LitElement, html} from 'lit';
-import '@fortawesome/fontawesome-free/js/all.js';
-import beercss from "beercss";
-import materialDynamicColors from "material-dynamic-colors";
+import { Navbar } from "./components/navbar";
+import { Login } from "./components/login";
+customElements.define('nav-bar',Navbar)
+customElements.define('page-login',Login)
