@@ -1,4 +1,3 @@
-import WebSocket from 'ws';
 var msgs = {}
 var msgsDone = []
 var store={}

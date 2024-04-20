@@ -121,4 +121,4 @@ on('sellStock',(session,company,amount)=>{
     var comp = new data.Company(db.getEntry(`companies.${company}`), db)
     comp.sellStock(user,amount)
 })
-rpc.create(8080)
+export const server=(s)=>{rpc.create(s)}

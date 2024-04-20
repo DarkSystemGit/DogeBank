@@ -1,4 +1,4 @@
-import {WebSocketServer as WebSocket} from 'ws'
+
 var handlers ={}
 function send(ws,msg){
     console.log('Response to Message: '+msg)
@@ -10,9 +10,9 @@ function handleMsg(obj){
 }
 export var rpc ={
     on:(msg,fn)=>{handlers[msg] = fn;},
-    create:port=>{
+    create:server=>{
         //console.log(handlers)
-        new WebSocket({port}).on('connection',ws=>{
+        server.on('connection',ws=>{
             ws.on('message',msg=>{
                 //console.log(this)
                 msg=JSON.parse(msg)
