@@ -36,10 +36,10 @@ on('login', (name, login) => {
             console.log(session)
             return session
         } else {
-            return false
+            return [true,false]
         }
     } catch {
-        return false
+        return [false,undefined]
     }
 })
 on('signout', (session) => {

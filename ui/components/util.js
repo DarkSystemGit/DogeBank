@@ -6,3 +6,8 @@ export function importedStyle(document){
         })
         return unsafeHTML(style)
 }
+export function redirect(page){
+    var body=document.getElementsByTagName('nav-bar')[0]
+    body.innerHTML=''
+    body.appendChild(document.createElement('page-'+page))
+}

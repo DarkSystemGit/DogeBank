@@ -129,6 +129,7 @@ export class Product {
         if ((!this.product.stock == 0) && (account.account.balance >= this.product.cost)) {
             this.product.stock = this.product.stock - amount
             account.account.cart[this.product.id] = { name: this.product.name, amount }
+            account.account.payments.push({name})
             account.setBalance((this.product.cost * amount) * -1)
             var comp=new Company(this.db.getEntry(this.product.company),this.db)
             comp.addOrder({id:this.product.id,amount})
