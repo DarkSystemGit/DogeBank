@@ -11,6 +11,7 @@
         "sessions": [
           
         ],
+        "payments":[],
         "login": "f0f14f8057cfd32bef94bf31258924aebe596f9873a74cf73f0cb4fcc1a44ffaced6d3cff16813d184fa34d69ae2086777a31a2464345033004885e1e69f021b"
       },
       "Bob": {

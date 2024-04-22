@@ -33,6 +33,7 @@ export class Bank extends LitElement {
         } else {
             this.balance = this.balance.toString() + ".00";
         }
+        this.payments=user.payments.map(elm=>this.generatePurchase(elm.company,elm.amount,elm.status))
         return html`
             ${importedStyle(document)}
             <div class="field large prefix round fill">
