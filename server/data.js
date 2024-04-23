@@ -76,9 +76,10 @@ export class Database {
 }
 export class Account {
     constructor(account, database) {
-        this.account = account || { name: '', sessions: [], balance: 0, login: '', icon: '' }
+        this.account = account || { name: '', sessions: [], balance: 0, login: '', icon: '',stocks:[] }
         this.db = database
         this.account.cart = this.account.cart || {}
+        this.account.stocks = this.account.stocks || []
         if (!this.db.db.accounts.hasOwnProperty(account.name)) database.createLink('logins.' + account.name, 'accounts.' + account.name + '.login')
 
     }
@@ -126,7 +127,7 @@ export class Product {
         this.db.create('products.' + this.product.name, this.product)
     }
     buy(account, amount) {
-        account.account.payments.push({ company: this.product.company, amount: (this.product.cost * amount), status: (!this.product.stock == 0) && (account.account.balance >= this.product.cost) })
+        account.account.payments.push({ company: this.product.company, amount: (this.product.cost * amount) * -1, status: (!this.product.stock == 0) && (account.account.balance >= this.product.cost) })
         if ((!this.product.stock == 0) && (account.account.balance >= this.product.cost)) {
             this.product.stock = this.product.stock - amount
             account.account.cart[this.product.id] = { name: this.product.name, amount }
@@ -164,17 +165,26 @@ export class Company {
     }
     buyStock(account, amount) {
         var price = this.company.stockPrice / this.company.stocks
-        account.setBalance((price * amount) * -1)
-        this.company.stocks += amount
-        this.company.stocksPrice += price * amount
-        this.serialize()
+        account.account.payments.push({ company: this.company.name, amount: price * -1, status: account.account.balance >= price })
+        if (account.account.balance >= price) {
+            account.account.stocks.push(this.company.name)
+            account.setBalance((price * amount) * -1)
+            this.company.stocks += amount
+            this.company.stocksPrice += price * amount
+            this.serialize()
+            return true
+        } return false
     }
     sellStock(account, amount) {
         var price = this.company.stockPrice / (this.company.stocks - amount)
-        account.setBalance((price * amount))
-        this.company.stocks -= amount
-        this.company.stocksPrice -= price * amount
-        this.serialize()
+        account.account.payments.push({ company: this.company.name, amount: price, status: account.account.stocks.includes(this.company.name) })
+        if (account.account.stocks.includes(this.company.name)) {
+            account.setBalance((price * amount))
+            this.company.stocks -= amount
+            this.company.stocksPrice -= price * amount
+            this.serialize()
+            return true
+        } return false
     }
     addOwner(account) {
         this.db.createLink('companies.' + this.company.name + '.stockholders.' + account.account.name, 'accounts.' + account.account.name)

@@ -1,6 +1,6 @@
-import { LitElement, html, css } from "lit";
-import { templateContent } from 'lit/directives/template-content.js';
-import { importedStyle } from "./util.js";
+import { LitElement, html, css, render } from "lit";
+import { when } from "lit/directives/when.js";
+import { importedStyle,redirect } from "./util.js";
 import { RPC } from "../rpc.js";
 export class Bank extends LitElement {
     static styles = css`
@@ -11,7 +11,7 @@ export class Bank extends LitElement {
     static properties = {
         balance: 300,
     };
-    
+
     constructor() {
         super();
         document.body.style.backgroundImage = 'url("img/BankBackground.svg")';
@@ -21,73 +21,100 @@ export class Bank extends LitElement {
             .classList.add("transparent");
 
         this.balance = 0;
-
     }
 
     // Render the UI as a function of component state
-    async render() {
-        this.dataPull()
-        return html`<div id="body">${
-            this._template('Loading...','Loading...')
-        }</div>`        
+    render() {
+        this.dataPull();
+        return html`<div id="body">
+            ${this._template("Loading...", "Loading...", "loading")}
+        </div>`;
     }
-    async dataPull(){
-        var rpc = new RPC()
-            var conn = await rpc.createChannel(window.location.hostname, parseInt(window.location.port), window.location.protocol == "https:")
-            var user = await rpc.sendMsg(conn, 'getUser', sessionStorage.getItem('session'))
-            this.balance = user.balance
-            if (this.balance % 1 != 0) {
-                this.balance = this.balance.toString();
-            } else {
-                this.balance = this.balance.toString() + ".00";
-            }
-            this.payments = user.payments.map(elm => this.generatePurchase(elm.company, elm.amount, elm.status))
-            console.log(this._template(this.balance,this.payments))
-            var doc=this.shadowRoot.getElementById('body')
-            doc.innerHTML=""
-            doc.appendChild(templateContent(this._template(this.balance,this.payments)))
+    async dataPull() {
+        var rpc = new RPC();
+        var conn = await rpc.createChannel(
+            window.location.hostname,
+            parseInt(window.location.port),
+            window.location.protocol == "https:",
+        );
+        var user = await rpc.sendMsg(
+            conn,
+            "getUser",
+            sessionStorage.getItem("session"),
+        );
+        this.balance = user.balance;
+        if (this.balance % 1 != 0) {
+            this.balance = this.balance.toString();
+        } else {
+            this.balance = this.balance.toString() + ".00";
         }
-    _template(balance,payments){
+        this.payments = user.payments.map((elm) =>
+            this.generatePurchase(elm.company, elm.amount, elm.status),
+        );
+        
+        if (this.shadowRoot.getElementById("loading"))
+            this.shadowRoot.getElementById("loading").remove();
+        render(
+            this._template("$" + this.balance, this.payments, ""),
+            this.shadowRoot.getElementById("body"),
+        );
+    }
+    _template(balance, payments, id) {
         return html`
             ${importedStyle(document)}
-            <div class="field large prefix round fill">
-                <i class="front">search</i>
-                <input />
-            </div>
-            <div class="comp">
-                <h1>Balance</h1>
-                <div style="display:flex;">
-                    <h1>$${balance}</h1>
-                    <button
-                        @click="${this.addBalance}"
-                        class="circle extra primary"
-                        style="transform: translateY(20%);"
-                    >
-                        <i>add</i>
-                    </button>
+            <div id="${id}">
+                <div class="field large prefix round fill">
+                    <i class="front">search</i>
+                    <input @click="${this.search}" id="search" />
                 </div>
-                <div class="padding"></div>
-                <h1>Recent Payments</h1>
-                ${payments}
+                <div class="comp">
+                    <h1>Balance</h1>
+                    <div style="display:flex;">
+                        <h1>${balance}</h1>
+                        <button
+                            @click="${this.addBalance}"
+                            class="circle extra primary"
+                            style="transform: translateY(20%);"
+                        >
+                            <i>add</i>
+                        </button>
+                    </div>
+                    <div class="padding"></div>
+                    <h1>Recent Transactions</h1>
+                    ${payments}
+                </div>
             </div>
         `;
     }
     generatePurchase(company, amount, status) {
         return html`
             <article style="width:50%;">
-                    <div class="row">
-                        <img style="width:10%" src="img/${status ? 'Check' : 'Invalid'}.svg" />
-                        <div class="max">
-                            <h5>${company}</h5>
-                            <h5>
-                                $${amount}
-                            </h5>
-                        </div>
+                <div class="row">
+                    <img
+                        style="width:10%"
+                        src="img/${status ? "Check" : "Invalid"}.svg"
+                    />
+                    <div class="max">
+                        <h5>${when(parseFloat(amount) < 0,() => html`To:`,() => html`From:`)} ${company}</h5>
+                        ${this.genAmount(amount)}
                     </div>
-                </article>
-        `
+                </div>
+            </article>
+        `;
     }
-    addBalance() { }
+    genAmount(amount) {
+        if (parseFloat(amount) < 0) return html`<h5 style="color:#ffb4ab;">-$${amount}</h5>`
+        return html`<h5 style="color:#9ed75b;">
+            +$${amount}
+        </h5>`;
+    }
+    search(){
+        var val=this.shadowRoot.getElementById('search').value
+        console.log(val)
+    }
+    addBalance() { 
+        redirect('addBalance')
+    }
     disconnectedCallback() {
         super.disconnectedCallback();
         document.body.style.backgroundImage = "";
