@@ -1,8 +1,9 @@
 import {RPC} from './rpcClient.js'
 import readline from 'readline'
+import 'dotenv/config'
 (async function(){
 var rpc= new RPC()    
-var channel=await rpc.createChannel('127.0.0.1',8080,false)
+var channel=await rpc.createChannel('127.0.0.1',parseInt(process.env.PORT)||8083,false)
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,

@@ -1,4 +1,5 @@
 import { LitElement, html, css } from "lit";
+import { templateContent } from 'lit/directives/template-content.js';
 import { importedStyle } from "./util.js";
 import { RPC } from "../rpc.js";
 export class Bank extends LitElement {
@@ -10,6 +11,7 @@ export class Bank extends LitElement {
     static properties = {
         balance: 300,
     };
+    
     constructor() {
         super();
         document.body.style.backgroundImage = 'url("img/BankBackground.svg")';
@@ -17,23 +19,35 @@ export class Bank extends LitElement {
         document
             .getElementsByTagName("nav-bar")[0]
             .classList.add("transparent");
-            
+
         this.balance = 0;
-        
+
     }
 
     // Render the UI as a function of component state
     async render() {
+        this.dataPull()
+        return html`<div id="body">${
+            this._template('Loading...','Loading...')
+        }</div>`        
+    }
+    async dataPull(){
         var rpc = new RPC()
-        var conn = await rpc.createChannel(window.location.hostname, parseInt(window.location.port), window.location.protocol == "https:")
-        var user=await rpc.sendMsg(conn,'getUser',sessionStorage.getItem('session'))
-        this.balance=user.balance
-        if (this.balance % 1 != 0) {
-            this.balance = this.balance.toString();
-        } else {
-            this.balance = this.balance.toString() + ".00";
+            var conn = await rpc.createChannel(window.location.hostname, parseInt(window.location.port), window.location.protocol == "https:")
+            var user = await rpc.sendMsg(conn, 'getUser', sessionStorage.getItem('session'))
+            this.balance = user.balance
+            if (this.balance % 1 != 0) {
+                this.balance = this.balance.toString();
+            } else {
+                this.balance = this.balance.toString() + ".00";
+            }
+            this.payments = user.payments.map(elm => this.generatePurchase(elm.company, elm.amount, elm.status))
+            console.log(this._template(this.balance,this.payments))
+            var doc=this.shadowRoot.getElementById('body')
+            doc.innerHTML=""
+            doc.appendChild(templateContent(this._template(this.balance,this.payments)))
         }
-        this.payments=user.payments.map(elm=>this.generatePurchase(elm.company,elm.amount,elm.status))
+    _template(balance,payments){
         return html`
             ${importedStyle(document)}
             <div class="field large prefix round fill">
@@ -43,7 +57,7 @@ export class Bank extends LitElement {
             <div class="comp">
                 <h1>Balance</h1>
                 <div style="display:flex;">
-                    <h1>$${this.balance}</h1>
+                    <h1>$${balance}</h1>
                     <button
                         @click="${this.addBalance}"
                         class="circle extra primary"
@@ -54,11 +68,11 @@ export class Bank extends LitElement {
                 </div>
                 <div class="padding"></div>
                 <h1>Recent Payments</h1>
-                ${this.payments}
+                ${payments}
             </div>
         `;
     }
-    generatePurchase(company,amount,status){
+    generatePurchase(company, amount, status) {
         return html`
             <article style="width:50%;">
                     <div class="row">

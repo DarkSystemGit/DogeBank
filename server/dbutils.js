@@ -7,6 +7,7 @@ if (process.argv[2] == "read") {
     console.dir(msgpack.unpack(fs.readFileSync(path.join(process.cwd(), 'main.db'))), { depth: null })
 } else if (process.argv[2] == "write") {
 
-    fs.writeFileSync(path.join(process.cwd(), 'main.db'), msgpack.pack(JSON.parse(fs.readFileSync(path.join(process.cwd(), process.argv[3])))))
+    fs.writeFileSync(path.join(process.cwd(), 'main.db'), 
+    msgpack.pack(JSON.parse(fs.readFileSync(path.join(process.cwd(), 'main.json')))))
 
 }
