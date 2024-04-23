@@ -3,7 +3,7 @@ import 'dotenv/config'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as process from 'process'
-var mail=new postmark.ServerClient(process.env.POSTMARK_API_KEY)
+//var mail=new postmark.ServerClient(process.env.POSTMARK_API_KEY)
 var emails={
     'emailVerification':'Verify Your Email',
     'merchantOrder':'New Order!',

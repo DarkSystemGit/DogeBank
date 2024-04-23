@@ -11,6 +11,7 @@
   "author": "DarkSystem",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "dogebank-ui": "file:ui",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-request-id": "^3.0.0",

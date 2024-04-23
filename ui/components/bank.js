@@ -2,6 +2,7 @@ import { LitElement, html, css, render } from "lit";
 import { when } from "lit/directives/when.js";
 import { importedStyle,redirect } from "./util.js";
 import { RPC } from "../rpc.js";
+import fuzzysort from 'fuzzysort'
 export class Bank extends LitElement {
     static styles = css`
         .comp {
@@ -51,7 +52,7 @@ export class Bank extends LitElement {
         this.payments = user.payments.map((elm) =>
             this.generatePurchase(elm.company, elm.amount, elm.status),
         );
-        
+        this.user=user
         if (this.shadowRoot.getElementById("loading"))
             this.shadowRoot.getElementById("loading").remove();
         render(
@@ -65,7 +66,7 @@ export class Bank extends LitElement {
             <div id="${id}">
                 <div class="field large prefix round fill">
                     <i class="front">search</i>
-                    <input @click="${this.search}" id="search" />
+                    <input @input="${this._search}" id="search" />
                 </div>
                 <div class="comp">
                     <h1>Balance</h1>
@@ -108,9 +109,23 @@ export class Bank extends LitElement {
             +$${amount}
         </h5>`;
     }
-    search(){
-        var val=this.shadowRoot.getElementById('search').value
-        console.log(val)
+    async _search(){
+        var rpc = new RPC();
+        var conn = await rpc.createChannel(
+            window.location.hostname,
+            parseInt(window.location.port),
+            window.location.protocol == "https:",
+        );
+        var user = await rpc.sendMsg(
+            conn,
+            "getUser",
+            sessionStorage.getItem("session"),
+        );
+        var res=[]
+        fuzzysort.go(this.value, user.payments, { key: "company", limit: 20}).forEach(
+            elm=>res.push(this.generatePurchase(elm.obj.company,elm.obj.amount,elm.obj.status))
+        )
+        
     }
     addBalance() { 
         redirect('addBalance')
