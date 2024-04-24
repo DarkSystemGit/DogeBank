@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import * as crypto from 'crypto'
 import fuzzysort from 'fuzzysort'
-import * as msgpack from 'msgpackr'
+
 function genUUID() {
     var bytes = crypto.randomBytes(16);
     bytes[6] = (bytes[6] & 0x0f) | 0x40;
@@ -12,7 +12,7 @@ export class Database {
     constructor(path, schema) {
         if (fs.existsSync(path)) {
             this.loaded = true
-            this.db = msgpack.unpack(fs.readFileSync(path))
+            this.db = JSON.parse(fs.readFileSync(path))
         } else {
             this.db = schema || {}
         }
@@ -47,7 +47,7 @@ export class Database {
         this.create(name, undefined)
     }
     writeDB() {
-        fs.writeFileSync(this.file, msgpack.pack(this.db))
+        fs.writeFileSync(this.file, JSON.stringify(this.db))
     }
     exists() {
         return !!this.loaded

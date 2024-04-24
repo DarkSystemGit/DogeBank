@@ -1,95 +1,104 @@
 {
-  "logins":{
-    "Jim":"${accounts.Jim.login}",
-    "Bob":"${accounts.Bob.login}"
-  },
-  "accounts":{
-    "Jim":{
-      "name":"Jim",
-      "icon":"sgdggsegedgbedhsdeg",
-      "balance":2.75,
-      "sessions":[
-        "5d74641392594ae1a2dea952cd8b199c",
-        "2ba470926b07450db0c97ced9c0d23e9",
-        "188c24ea8bb2417aab883b8470f37465",
-        "2d57a3e808744ddfa60eb4b79423f253",
-        "b7868ce2771b40c9b34c0ec8788d8791",
-        "52f0f7cf210246628182c00371ce4150",
-        "0d984de697294406ae9b5b1ee0df8d96",
-        "0ed8f2f63f004bda8a60243a2d6b72aa",
-        "c0556a5812e144018090d33cc49f25a1",
-        "3fd109c0a23b43daac8c50c5d94f500f",
-        "cfae5218fb8a499e8da4a1b4e2a028c4",
-        "39024b89cb7f4409846191cfcbcfe188",
-        "2c63e40028f34a71b0fc72e5fcd56940",
-        "8ecec98fe5364d09aa9bf61187439cb9",
-        "92ba6a811c234755bff88a99dad9e94e",
-        "11c0be4bd59844d089a6d365dbd58107",
-        "557ece0fb0a6474380f82d417aa7d6e3",
-        "10141ea312c94066b840bd883bd0dce3",
-        "41109d74266844c9a2a727bf726cb000"
-      ],
-      "login":"f0f14f8057cfd32bef94bf31258924aebe596f9873a74cf73f0cb4fcc1a44ffaced6d3cff16813d184fa34d69ae2086777a31a2464345033004885e1e69f021b",
-      "payments":[
-        {
-          "company":"testCo",
-          "name":"testProduct",
-          "amount":30,
-          "status":true
-        }
-      ],
-      "cart":{}
+    "logins": {
+        "Jim": "${accounts.Jim.login}",
+        "Bob": "${accounts.Bob.login}"
     },
-    "Bob":{
-      "name":"Bob",
-      "balance":0,
-      "sessions":[],
-      "login":"f0f14f8057cfd32bef94bf31258924aebe596f9873a74cf73f0cb4fcc1a44ffaced6d3cff16813d184fa34d69ae2086777a31a2464345033004885e1e69f021b",
-      "cart":{}
+    "accounts": {
+        "Jim": {
+            "name": "Jim",
+            "icon": "sgdggsegedgbedhsdeg",
+            "balance": 2.75,
+            "sessions": [
+                "5d74641392594ae1a2dea952cd8b199c",
+                "2ba470926b07450db0c97ced9c0d23e9",
+                "188c24ea8bb2417aab883b8470f37465",
+                "2d57a3e808744ddfa60eb4b79423f253",
+                "b7868ce2771b40c9b34c0ec8788d8791",
+                "52f0f7cf210246628182c00371ce4150",
+                "0d984de697294406ae9b5b1ee0df8d96",
+                "0ed8f2f63f004bda8a60243a2d6b72aa",
+                "c0556a5812e144018090d33cc49f25a1",
+                "3fd109c0a23b43daac8c50c5d94f500f",
+                "cfae5218fb8a499e8da4a1b4e2a028c4",
+                "39024b89cb7f4409846191cfcbcfe188",
+                "2c63e40028f34a71b0fc72e5fcd56940",
+                "8ecec98fe5364d09aa9bf61187439cb9",
+                "92ba6a811c234755bff88a99dad9e94e",
+                "11c0be4bd59844d089a6d365dbd58107",
+                "557ece0fb0a6474380f82d417aa7d6e3",
+                "10141ea312c94066b840bd883bd0dce3",
+                "41109d74266844c9a2a727bf726cb000",
+                "bee4776c24f74193a0e80ed127ad2b1f",
+                "0475d389020f48309cf90d8cf92c9c30",
+                "aeec0fc74d454cbbbf9c1ee4d84458b7",
+                "1fbe80228bd64bde9d1fa19417eeb766"
+            ],
+            "login": "f0f14f8057cfd32bef94bf31258924aebe596f9873a74cf73f0cb4fcc1a44ffaced6d3cff16813d184fa34d69ae2086777a31a2464345033004885e1e69f021b",
+            "payments": [
+                {
+                    "company": "testCo",
+                    "name": "testProduct",
+                    "amount": -30,
+                    "status": true
+                }
+            ],
+            "cart": {},
+            "stocks": []
+        },
+        "Bob": {
+            "name": "Bob",
+            "balance": 0,
+            "sessions": [],
+            "login": "f0f14f8057cfd32bef94bf31258924aebe596f9873a74cf73f0cb4fcc1a44ffaced6d3cff16813d184fa34d69ae2086777a31a2464345033004885e1e69f021b",
+            "cart": {}
+        }
+    },
+    "companies": {
+        "testCo": {
+            "name": "testCo",
+            "stockholders": {
+                "Bob": "${accounts.Bob}"
+            },
+            "products": {
+                "testProduct": "${products.testProduct}"
+            },
+            "stockPrice": 0
+        }
+    },
+    "prodIds": {
+        "fe116abbe8c042bd868563b5879951d6": "${products.testProduct}"
+    },
+    "products": {
+        "testProduct": {
+            "name": "testProduct",
+            "cost": 5.25,
+            "img": "fdgga",
+            "desc": "TestProduct",
+            "stock": 1,
+            "id": "fe116abbe8c042bd868563b5879951d6"
+        }
+    },
+    "sessions": {
+        "188c24ea8bb2417aab883b8470f37465": "Jim",
+        "2d57a3e808744ddfa60eb4b79423f253": "Jim",
+        "b7868ce2771b40c9b34c0ec8788d8791": "Jim",
+        "52f0f7cf210246628182c00371ce4150": "Jim",
+        "0d984de697294406ae9b5b1ee0df8d96": "Jim",
+        "0ed8f2f63f004bda8a60243a2d6b72aa": "Jim",
+        "c0556a5812e144018090d33cc49f25a1": "Jim",
+        "3fd109c0a23b43daac8c50c5d94f500f": "Jim",
+        "cfae5218fb8a499e8da4a1b4e2a028c4": "Jim",
+        "39024b89cb7f4409846191cfcbcfe188": "Jim",
+        "2c63e40028f34a71b0fc72e5fcd56940": "Jim",
+        "8ecec98fe5364d09aa9bf61187439cb9": "Jim",
+        "92ba6a811c234755bff88a99dad9e94e": "Jim",
+        "11c0be4bd59844d089a6d365dbd58107": "Jim",
+        "557ece0fb0a6474380f82d417aa7d6e3": "Jim",
+        "10141ea312c94066b840bd883bd0dce3": "Jim",
+        "41109d74266844c9a2a727bf726cb000": "Jim",
+        "bee4776c24f74193a0e80ed127ad2b1f": "Jim",
+        "0475d389020f48309cf90d8cf92c9c30": "Jim",
+        "aeec0fc74d454cbbbf9c1ee4d84458b7": "Jim",
+        "1fbe80228bd64bde9d1fa19417eeb766": "Jim"
     }
-  },
-  "companies":{
-    "testCo":{
-      "name":"testCo",
-      "stockholders":{
-        "Bob":"${accounts.Bob}"
-      },
-      "products":{
-        "testProduct":"${products.testProduct}"
-      },
-      "stockPrice":0
-    }
-  },
-  "prodIds":{
-    "fe116abbe8c042bd868563b5879951d6":"${products.testProduct}"
-  },
-  "products":{
-    "testProduct":{
-      "name":"testProduct",
-      "cost":5.25,
-      "img":"fdgga",
-      "desc":"TestProduct",
-      "stock":1,
-      "id":"fe116abbe8c042bd868563b5879951d6"
-    }
-  },
-  "sessions":{
-    "188c24ea8bb2417aab883b8470f37465":"Jim",
-    "2d57a3e808744ddfa60eb4b79423f253":"Jim",
-    "b7868ce2771b40c9b34c0ec8788d8791":"Jim",
-    "52f0f7cf210246628182c00371ce4150":"Jim",
-    "0d984de697294406ae9b5b1ee0df8d96":"Jim",
-    "0ed8f2f63f004bda8a60243a2d6b72aa":"Jim",
-    "c0556a5812e144018090d33cc49f25a1":"Jim",
-    "3fd109c0a23b43daac8c50c5d94f500f":"Jim",
-    "cfae5218fb8a499e8da4a1b4e2a028c4":"Jim",
-    "39024b89cb7f4409846191cfcbcfe188":"Jim",
-    "2c63e40028f34a71b0fc72e5fcd56940":"Jim",
-    "8ecec98fe5364d09aa9bf61187439cb9":"Jim",
-    "92ba6a811c234755bff88a99dad9e94e":"Jim",
-    "11c0be4bd59844d089a6d365dbd58107":"Jim",
-    "557ece0fb0a6474380f82d417aa7d6e3":"Jim",
-    "10141ea312c94066b840bd883bd0dce3":"Jim",
-    "41109d74266844c9a2a727bf726cb000":"Jim"
-  }
 }

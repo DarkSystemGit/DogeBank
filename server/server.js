@@ -7,7 +7,7 @@ import * as process from 'process'
 var db = new data.Database(path.join(process.cwd(), 'main.db'));
 var sessions = db.db.sessions
 function on(msg, func) {
-    if (!['login', 'createUser', 'editUser','getUser'].includes(msg)) {
+    if (!['login', 'createUser', 'getUser'].includes(msg)) {
         rpc.on(msg, (s) => { if (sessions[s]) func(...arguments) })
     } else {
         rpc.on(msg, func)
@@ -17,12 +17,12 @@ var getUser = (session) => {
     console.log(sessions[session],sessions)
     return db.getEntry('accounts.' + sessions[session])
 }
-var createUser = (name, password, icon, email) => {
+var createUser = (name, password,  email,icon) => {
     var user = new data.Account({ name, icon, balance: 0, sessions: [], login: '', email }, db)
-    user.setLogin(password)
+    if(password!="")user.setLogin(password)
 }
 on('createUser', createUser)
-on('editUser', createUser)
+on('editUser', (s)=>createUser(...Array.from(arguments).slice(1)))
 on('removeUser', (s, name) => {
     db.remove(`accounts.${name}`)
 })

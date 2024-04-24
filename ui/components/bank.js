@@ -113,7 +113,7 @@ export class Bank extends LitElement {
     }
     genAmount(amount) {
         if (parseFloat(amount) < 0)
-            return html`<h5 style="color:#ffb4ab;">-$${amount}</h5>`;
+            return html`<h5 style="color:#ffb4ab;">-$${amount.toString().replace('-','')}</h5>`;
         return html`<h5 style="color:#9ed75b;">+$${amount}</h5>`;
     }
     async __search() {
@@ -156,7 +156,7 @@ export class Bank extends LitElement {
                                 ${((amount) => {
                         if (parseFloat(amount) < 0)
                             return html`<h5 style="color:#ffb4ab;">
-                                            -$${amount}
+                                            -$${amount.toString().replace('-','')}
                                         </h5>`;
                         return html`<h5 style="color:#9ed75b;">
                                         +$${amount}

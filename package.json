@@ -11,6 +11,8 @@
   "author": "DarkSystem",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "cbor": "^9.0.2",
+    "cbor-x": "^1.5.9",
     "dogebank-ui": "file:ui",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
