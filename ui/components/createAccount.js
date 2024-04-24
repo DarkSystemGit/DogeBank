@@ -46,13 +46,8 @@ export class Account extends LitElement {
             </div>
             <nav>
                 <button class="responsive" @click="${this._update}">Update</button>
-                
             </nav>
-            <div class="large-divider"></div>
-            <nav>
-                <button class="responsive" @click="${this.signout}" style="background-color:#ffb4ab;color:black;">Signout</button>
-                
-            </nav>            
+            
         </div>
     </article>`
     }
@@ -65,12 +60,6 @@ export class Account extends LitElement {
 
         doc.replaceChildren();
         render(this._template(user),doc)
-    }
-    async signout(){
-        var rpc = new RPC()
-        var conn = await rpc.createChannel(window.location.hostname, parseInt(window.location.port), window.location.protocol == "https:")
-        await rpc.sendMsg(conn, 'signout',sessionStorage.getItem('session'))
-        redirect('login')
     }
     async _update(){
         console.log(this.parentElement.parentElement)
