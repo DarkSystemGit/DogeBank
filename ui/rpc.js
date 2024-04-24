@@ -71,4 +71,8 @@ RPC.prototype.sendMsg = async function (cinfo, msg) {
     } else {
         throw new Error(JSON.stringify(res))
     }
+
+}
+RPC.prototype.close=(cinfo)=>{
+    cinfo.close()
 }

@@ -1,8 +1,8 @@
 import { LitElement, html, css, render } from "lit";
 import { when } from "lit/directives/when.js";
-import { importedStyle,redirect } from "./util.js";
+import { importedStyle, redirect } from "./util.js";
 import { RPC } from "../rpc.js";
-import fuzzysort from 'fuzzysort'
+import fuzzysort from "fuzzysort";
 export class Bank extends LitElement {
     static styles = css`
         .comp {
@@ -43,6 +43,7 @@ export class Bank extends LitElement {
             "getUser",
             sessionStorage.getItem("session"),
         );
+        rpc.close(conn);
         this.balance = user.balance;
         if (this.balance % 1 != 0) {
             this.balance = this.balance.toString();
@@ -52,7 +53,7 @@ export class Bank extends LitElement {
         this.payments = user.payments.map((elm) =>
             this.generatePurchase(elm.company, elm.amount, elm.status),
         );
-        this.user=user
+        this.user = user;
         if (this.shadowRoot.getElementById("loading"))
             this.shadowRoot.getElementById("loading").remove();
         render(
@@ -66,7 +67,7 @@ export class Bank extends LitElement {
             <div id="${id}">
                 <div class="field large prefix round fill">
                     <i class="front">search</i>
-                    <input @input="${this._search}" id="search" />
+                    <input @input="${this.__search}" id="search" />
                 </div>
                 <div class="comp">
                     <h1>Balance</h1>
@@ -96,7 +97,14 @@ export class Bank extends LitElement {
                         src="img/${status ? "Check" : "Invalid"}.svg"
                     />
                     <div class="max">
-                        <h5>${when(parseFloat(amount) < 0,() => html`To:`,() => html`From:`)} ${company}</h5>
+                        <h5>
+                            ${when(
+            parseFloat(amount) < 0,
+            () => html`To:`,
+            () => html`From:`,
+        )}
+                            ${company}
+                        </h5>
                         ${this.genAmount(amount)}
                     </div>
                 </div>
@@ -104,12 +112,12 @@ export class Bank extends LitElement {
         `;
     }
     genAmount(amount) {
-        if (parseFloat(amount) < 0) return html`<h5 style="color:#ffb4ab;">-$${amount}</h5>`
-        return html`<h5 style="color:#9ed75b;">
-            +$${amount}
-        </h5>`;
+        if (parseFloat(amount) < 0)
+            return html`<h5 style="color:#ffb4ab;">-$${amount}</h5>`;
+        return html`<h5 style="color:#9ed75b;">+$${amount}</h5>`;
     }
-    async _search(){
+    async __search() {
+        if(this.value!=""){
         var rpc = new RPC();
         var conn = await rpc.createChannel(
             window.location.hostname,
@@ -121,14 +129,62 @@ export class Bank extends LitElement {
             "getUser",
             sessionStorage.getItem("session"),
         );
-        var res=[]
-        fuzzysort.go(this.value, user.payments, { key: "company", limit: 20}).forEach(
-            elm=>res.push(this.generatePurchase(elm.obj.company,elm.obj.amount,elm.obj.status))
-        )
-        
+        rpc.close(conn);
+        var res = [];
+        fuzzysort
+            .go(this.value, user.payments, { key: "company", limit: 20 })
+            .forEach((elm) => {
+                console.log(elm);
+                res.push(html`
+                    <article style="width:50%;">
+                        <div class="row">
+                            <img
+                                style="width:10%"
+                                src="img/${elm.obj.status
+                        ? "Check"
+                        : "Invalid"}.svg"
+                            />
+                            <div class="max">
+                                <h5>
+                                    ${when(
+                            parseFloat(elm.obj.amount) < 0,
+                            () => html`To:`,
+                            () => html`From:`,
+                        )}
+                                    ${elm.obj.company}
+                                </h5>
+                                ${((amount) => {
+                        if (parseFloat(amount) < 0)
+                            return html`<h5 style="color:#ffb4ab;">
+                                            -$${amount}
+                                        </h5>`;
+                        return html`<h5 style="color:#9ed75b;">
+                                        +$${amount}
+                                    </h5>`;
+                    })(elm.obj.amount)}
+                            </div>
+                        </div>
+                    </article>
+                `);
+            });
+
+        var doc = this.parentElement.parentElement.lastElementChild;
+        doc.replaceChildren();
+        var disp = document.createElement("div");
+        render(html`${res}`, disp);
+        if (disp.children.length != 0) {
+            doc.appendChild(disp);
+        } else {
+            var h1 = document.createElement("h1");
+            h1.innerText = "No Transactions Found.";
+            h1.style.transform = 'translate(20%,-50%)';
+            doc.appendChild(h1);
+        }}else{
+            redirect('bank')
+        }
     }
-    addBalance() { 
-        redirect('addBalance')
+    addBalance() {
+        redirect("addBalance");
     }
     disconnectedCallback() {
         super.disconnectedCallback();
