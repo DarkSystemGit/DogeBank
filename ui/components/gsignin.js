@@ -120,7 +120,7 @@ export class GSignIn extends LitElement {
     // Render the UI as a function of component state
     render() {
         return html`
-            ${importedStyle(document)}
+            
             <script src="https://accounts.google.com/gsi/client" async></script>
             <button class="gsi-material-button center">
   <div class="gsi-material-button-state"></div>

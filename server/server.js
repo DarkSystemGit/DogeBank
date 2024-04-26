@@ -7,7 +7,7 @@ import * as process from 'process'
 var db = new data.Database(path.join(process.cwd(), 'main.db'));
 var sessions = db.db.sessions
 function on(msg, func) {
-    if (!['login', 'createUser', 'getUser','editUser'].includes(msg)) {
+    if (!['login', 'createUser', 'getUser','editUser','signout'].includes(msg)) {
         rpc.on(msg, (s) => { if (sessions[s]) func(...arguments) })
     } else {
         rpc.on(msg, func)
@@ -47,7 +47,7 @@ on('login', (name, login) => {
 })
 on('signout', (session) => {
     var user = new data.Account(getUser(session), db)
-    user.sessions.filter(e => e !== session)
+    user.account.sessions=user.account.sessions.filter(e => e !== session)
     user.serialize()
     delete sessions[session]
     db.writeDB()

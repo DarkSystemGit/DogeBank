@@ -26,7 +26,7 @@ export var rpc ={
                         send(ws,JSON.stringify({status:'ok',res:handleMsg(msg),id:msg.id}))
                     } catch (error) {
                         console.log(error)
-                        send(ws,JSON.stringify({status:'error',res:error,id:msg.id}))
+                        send(ws,JSON.stringify({status:'error',res:error.toString(),id:msg.id}))
                     }
                 }
             })

@@ -37,10 +37,17 @@ export class Login extends LitElement {
                         <button class="responsive" @click="${this.login}">Continue</button>
                     </nav>
                     <div class="large-divider"></div>
+                    <nav>
+                        <button class="responsive" @click="${this.caccount}">Create Account</button>
+                    </nav>
+                    <div class="padding"></div>
                     <g-signin></g-signin>
                 </div>
             </article>
         `;
+    }
+    caccount(){
+        redirect('cuser')
     }
     async login() {
         var getField = (f) => { return this.shadowRoot.getElementById('login-' + f).value }
