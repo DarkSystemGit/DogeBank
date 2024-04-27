@@ -54,7 +54,7 @@ export class CAccount extends LitElement {
                 </div>
                 <div class="field label border round jsinput" id="jpasswd">
                     <input
-                        type="text"
+                        type="email"
                         id="login-email"
                         value="${obj.email}"
                         placeholder=" "

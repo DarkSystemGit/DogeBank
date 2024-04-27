@@ -42,7 +42,7 @@ export class Account extends LitElement {
                 <label>Password</label>
             </div>
             <div class="field label border round jsinput" id="jpasswd">
-                <input type="text" id="login-email" value="${obj.email}"  placeholder=" "/>
+                <input type="email" id="login-email" value="${obj.email}"  placeholder=" "/>
                 <label>Email</label>
             </div>
             <nav>
