@@ -7,7 +7,26 @@ export function importedStyle(document){
         return unsafeHTML(style)
 }
 export function redirect(page){
+    if(sessionStorage.getItem('session')!=null||['cuser','login'].includes(page)){
     var body=document.getElementsByTagName('nav-bar')[0]
     body.innerHTML=''
     body.appendChild(document.createElement('page-'+page))
+}else{
+    var body=document.getElementsByTagName('nav-bar')[0]
+    body.innerHTML=''
+    body.appendChild(document.createElement('page-404'))
+}
+}
+export function promisify(func){
+    return ()=>{return new Promise(func)}
+}
+export async function read(file){
+    const FR = new FileReader();
+    
+    var read=promisify((resolve)=>FR.addEventListener("load", function(evt) {
+      resolve(evt.target.result);
+    })); 
+      
+    FR.readAsDataURL(file);
+    return await read()    
 }

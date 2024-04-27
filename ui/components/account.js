@@ -16,6 +16,7 @@ export class Account extends LitElement {
         super();
         this.name="Loading"
         this.email='you@example.com'
+        this.icon="img/profile.svg"
     }
 
     // Render the UI as a function of component state
@@ -31,7 +32,7 @@ export class Account extends LitElement {
         <div class="center">
             <h1 class="center-align center">Your Account</h1>
             <div class="padding"></div>
-            <img class="circle extra center" alt="profile pic" src="img/profile.svg" style="width:12.5%;height:12.5%;">
+            <img class="circle extra center" id="prof" alt="profile pic" src=${obj.icon} style="width:12.5%;height:12.5%;">
             <div class="field label border round jsinput" id="jun">
                 <input type="text" id="login-username" value="${obj.name}"  placeholder=" "/>
                 <label>Username</label>

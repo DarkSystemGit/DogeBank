@@ -18,6 +18,7 @@ export class Login extends LitElement {
 
     // Render the UI as a function of component state
     render() {
+        sessionStorage.clear()
         return html`
             ${importedStyle(document)}
             <article class="round pos">

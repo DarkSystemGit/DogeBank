@@ -1,5 +1,5 @@
 import { LitElement, html, css, render } from "lit";
-import { importedStyle, redirect } from "./util.js";
+import { importedStyle, redirect,read } from "./util.js";
 import { RPC } from "../rpc.js";
 export class CAccount extends LitElement {
     static styles = css`
@@ -14,7 +14,7 @@ export class CAccount extends LitElement {
     constructor() {
         super();
     }
-
+    
     // Render the UI as a function of component state
     render() {
         return html`
@@ -32,9 +32,10 @@ export class CAccount extends LitElement {
                         class="circle extra center"
                         alt="profile pic"
                         src="img/AddProfile.svg"
+                        id="prof"
                         style="width:12.5%;height:12.5%;"
                     />
-                    <input type="file" accept="image/png" id="fileInput">
+                    <input @change="${this.img}" type="file" accept="image/*" id="fileInput">
                 </div>
                 
                 
@@ -68,24 +69,25 @@ export class CAccount extends LitElement {
             </div>
         </article>`;
     }
-
+    async img(){
+        var prof=await read(this.shadowRoot.getElementById('fileInput').files[0])
+        this.shadowRoot.getElementById('prof').src=prof
+    }
     async _create() {
-        console.log(this)
-        var prof=await fetch(URL.createObjectURL(this.shadowRoot.getElementById('fileInput').files[0]))
+        var prof=await read(this.shadowRoot.getElementById('fileInput').files[0])
         var fields={
-            profile:btoa(await prof.blob()),
+            profile:prof,
             passwd:this.shadowRoot.getElementById('login-passwd').value,
             email:this.shadowRoot.getElementById('login-email').value,
             name:this.shadowRoot.getElementById('login-username').value
         }
-        console.log(fields)
         var rpc = new RPC();
         var conn = await rpc.createChannel(
             window.location.hostname,
             parseInt(window.location.port),
             window.location.protocol == "https:",
         );
-
+        await rpc.sendMsg(conn,'createUser',fields.name,fields.passwd,fields.email,fields.profile)
         rpc.close(conn);
         redirect("login");
     }

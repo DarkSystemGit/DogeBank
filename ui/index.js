@@ -3,8 +3,10 @@ import { Login } from "./components/login";
 import { Bank } from "./components/bank";
 import { Account } from "./components/account";
 import { CAccount } from "./components/createAccount";
+import { ErrPage } from "./components/404";
 customElements.define('nav-bar',Navbar)
 customElements.define('page-login',Login)
 customElements.define('page-bank',Bank)
 customElements.define('page-account',Account)
 customElements.define('page-cuser',CAccount)
+customElements.define('page-404',ErrPage)
