@@ -30,3 +30,8 @@ export async function read(file){
     FR.readAsDataURL(file);
     return await read()    
 }
+export function awaitValue(condition){
+    return new Promise((resolve, reject) => {
+        var int=setInterval(()=>{if(condition()){resolve();clearInterval(int)}})
+    })
+}
