@@ -38,8 +38,9 @@ export class Stock extends LitElement {
   render() {
     return html`
       ${importedStyle(document)}
-      <article class="round" style="  width: 30vw;
-  height: fit-content;">
+      <article class="round" style="  min-width: 30vw;
+  height: fit-content;
+  max-width: fit-content;">
         <div class="row">
           <img class="circle extra" style="transform: translateY(-150%);" src="${this.company.logo}" />
           <div>
