@@ -2,7 +2,8 @@
     "logins": {
         "Jim": "${accounts.Jim.login}",
         "Bob": "${accounts.Bob.login}",
-        "John Doe": "${accounts.John Doe.login}"
+        "John Doe": "${accounts.John Doe.login}",
+        "bob": "${accounts.bob.login}"
     },
     "accounts": {
         "Jim": {
@@ -22,7 +23,15 @@
                 "23119cce6c374f639c06973599846789",
                 "8855b8c75a38416cb997ad8881db5b8d",
                 "d75e3f1b418d4461b10091aa81a9c421",
-                "1fd307813e4540069c3bdc8c00662bb2"
+                "1fd307813e4540069c3bdc8c00662bb2",
+                "e1942bed3bcb4afd9c4e5953a96f3983",
+                "c26ffd9a10924663b31ad33ca64e3ba9",
+                "2fd48ce7218448ea86b2f15c4f46c67c",
+                "fee7cebb87e8439cbbffc4659ab60ca5",
+                "2e6d1047edab4b04b6f40d1460458d04",
+                "afd9791ce037482ebff867d7f75eeb1c",
+                "12194c94530b41849bcf0be05f566a45",
+                "e4fadab7cecd42668d7f7d7efed53daa"
             ],
             "login": "ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f",
             "email": "jim@example.com",
@@ -33,9 +42,15 @@
         "Bob": {
             "name": "Bob",
             "balance": 0,
-            "sessions": [],
+            "sessions": [
+                "d8d524609a9d40c6ad454ef3d99dddfd",
+                "0dc72c5b025942af8b64a2bcc0d683e8",
+                "846f77d2ea5a49a58117e3b1f7a3b080"
+            ],
             "login": "f0f14f8057cfd32bef94bf31258924aebe596f9873a74cf73f0cb4fcc1a44ffaced6d3cff16813d184fa34d69ae2086777a31a2464345033004885e1e69f021b",
-            "cart": {}
+            "cart": {},
+            "stocks": [],
+            "payments": []
         },
         "John Doe": {
             "name": "John Doe",
@@ -50,13 +65,24 @@
             "cart": {},
             "stocks": [],
             "payments": []
+        },
+        "bob": {
+            "name": "bob",
+            "icon": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjMxIiBoZWlnaHQ9IjIzMSIgdmlld0JveD0iMCAwIDIzMSAyMzEiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjExNS41IiBjeT0iMTE1LjUiIHI9IjExNS41IiBmaWxsPSJ1cmwoI3BhaW50MF9saW5lYXJfMl84KSIvPgo8Y2lyY2xlIGN4PSIxMTUuNSIgY3k9IjExNS41IiByPSIxMTUuNSIgZmlsbD0id2hpdGUiLz4KPGNpcmNsZSBjeD0iMTE1LjUiIGN5PSIxMTUuNSIgcj0iMTE1LjUiIGZpbGw9IiMwNTlFRjQiIGZpbGwtb3BhY2l0eT0iMC41NyIvPgo8Y2lyY2xlIGN4PSIxMTUuNSIgY3k9Ijc4LjUiIHI9IjUzLjUiIGZpbGw9IiMwNTlFRjQiIGZpbGwtb3BhY2l0eT0iMC44Ii8+CjxjaXJjbGUgY3g9IjExNS41IiBjeT0iNzguNSIgcj0iNTMuNSIgZmlsbD0idXJsKCNwYWludDFfbGluZWFyXzJfOCkiIGZpbGwtb3BhY2l0eT0iMC44Ii8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNDMgMjA1LjA0QzQ3LjQyMjYgMTY4LjM5NiA3OC42MjY3IDE0MCAxMTYuNDYzIDE0MEMxNTQuMDQyIDE0MCAxODUuMDc5IDE2OC4wMTEgMTg5LjgzMiAyMDQuMjkzQzE2OS44MDkgMjIwLjk2OSAxNDQuMDU4IDIzMSAxMTUuOTYzIDIzMUM4OC4yOTA1IDIzMSA2Mi44OTA5IDIyMS4yNjggNDMgMjA1LjA0WiIgZmlsbD0iIzA1OUVGNCIgZmlsbC1vcGFjaXR5PSIwLjgiLz4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik00MyAyMDUuMDRDNDcuNDIyNiAxNjguMzk2IDc4LjYyNjcgMTQwIDExNi40NjMgMTQwQzE1NC4wNDIgMTQwIDE4NS4wNzkgMTY4LjAxMSAxODkuODMyIDIwNC4yOTNDMTY5LjgwOSAyMjAuOTY5IDE0NC4wNTggMjMxIDExNS45NjMgMjMxQzg4LjI5MDUgMjMxIDYyLjg5MDkgMjIxLjI2OCA0MyAyMDUuMDRaIiBmaWxsPSJ1cmwoI3BhaW50Ml9saW5lYXJfMl84KSIgZmlsbC1vcGFjaXR5PSIwLjgiLz4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhcl8yXzgiIHgxPSIxMTUuNSIgeTE9IjAiIHgyPSIxMTUuNSIgeTI9IjIzMSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSJ3aGl0ZSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNDOUM4QzgiIHN0b3Atb3BhY2l0eT0iMC45OSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MV9saW5lYXJfMl84IiB4MT0iMTE1LjUiIHkxPSIyNSIgeDI9IjExNS41IiB5Mj0iMTMyIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiMwNTlFRjQiLz4KPHN0b3Agb2Zmc2V0PSIwLjk5OTgiIHN0b3AtY29sb3I9IiMwNTg2Q0UiIHN0b3Atb3BhY2l0eT0iMC45MiIvPgo8c3RvcCBvZmZzZXQ9IjAuOTk5OSIgc3RvcC1jb2xvcj0iIzA1OUVGNCIgc3RvcC1vcGFjaXR5PSIwLjAxNTYyNSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwNTlFRjQiIHN0b3Atb3BhY2l0eT0iMCIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwNTg2Q0UiIHN0b3Atb3BhY2l0eT0iMC45NSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50Ml9saW5lYXJfMl84IiB4MT0iMTE2LjQxNiIgeTE9IjE0MCIgeDI9IjExNi40MTYiIHkyPSIyMzEiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzA1OUVGNCIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwNTg2Q0UiIHN0b3Atb3BhY2l0eT0iMC45NSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPgo=",
+            "balance": 0,
+            "sessions": [],
+            "login": "1f40fc92da241694750979ee6cf582f2d5d7d28e18335de05abc54d0560e0f5302860c652bf08d560252aa5e74210546f369fbbbce8c12cfc7957b2652fe9a75",
+            "email": "a",
+            "cart": {},
+            "stocks": [],
+            "payments": []
         }
     },
     "companies": {
         "testCo": {
             "name": "testCo",
             "stockholders": {
-                "Bob": "${accounts.Bob}"
+                "Jim": "${accounts.Jim}"
             },
             "products": {
                 "testProduct": "${products.testProduct}"
@@ -114,6 +140,21 @@
         "d75e3f1b418d4461b10091aa81a9c421": "Jim",
         "ef08266203ea46618d7b260296694c97": "John Doe",
         "596f03b93a6b4d58bb293af11f3432d9": "John Doe",
-        "1fd307813e4540069c3bdc8c00662bb2": "Jim"
+        "1fd307813e4540069c3bdc8c00662bb2": "Jim",
+        "66862045e8ca42cc8c38ffc9085d018b": "Jim",
+        "d6dc89a7a95640bf9697838da8b91291": "bob",
+        "e1942bed3bcb4afd9c4e5953a96f3983": "Jim",
+        "c26ffd9a10924663b31ad33ca64e3ba9": "Jim",
+        "2fd48ce7218448ea86b2f15c4f46c67c": "Jim",
+        "fee7cebb87e8439cbbffc4659ab60ca5": "Jim",
+        "2e6d1047edab4b04b6f40d1460458d04": "Jim",
+        "afd9791ce037482ebff867d7f75eeb1c": "Jim",
+        "12194c94530b41849bcf0be05f566a45": "Jim",
+        "b89eb1548f9a40ebb837b53e309eb27a": "Jim",
+        "d8d524609a9d40c6ad454ef3d99dddfd": "Bob",
+        "0dc72c5b025942af8b64a2bcc0d683e8": "Bob",
+        "846f77d2ea5a49a58117e3b1f7a3b080": "Bob",
+        "5714faa919914f6381a7526a2dc454c2": "Bob",
+        "e4fadab7cecd42668d7f7d7efed53daa": "Jim"
     }
 }

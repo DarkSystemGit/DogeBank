@@ -3,7 +3,7 @@ export function importedStyle(document){
     var style='';
     
         Array.from(document.getElementsByTagName('link')).concat(Array.from(document.getElementsByTagName('style'))).forEach(elm=>{
-            console.log(elm)
+            
             if((elm.getAttribute('rel')=="stylesheet")||(elm.tagName=="STYLE")){style+=elm.outerHTML}
         })
         return unsafeHTML(style)
@@ -35,6 +35,6 @@ export async function read(file){
 }
 export function awaitValue(condition){
     return new Promise((resolve, reject) => {
-        var int=setInterval(()=>{if(condition()){resolve();clearInterval(int)}})
+        var int=setInterval(()=>{if(condition()){clearInterval(int);resolve()}})
     })
 }

@@ -9,6 +9,7 @@ export class CompanyItem extends LitElement {
         super();
         //Company is an object like such {name:"companyName",value:Number,logo:"b64-encoded Image",revenue:Data}
         //Data takes the form {"year-month-day(yyyy-mm-dd)":price,...}
+        this.company=this.company||{}
         this.data = this.company.revenue || {}
     }
 
@@ -30,8 +31,10 @@ export class CompanyItem extends LitElement {
 
     }
     change() {
+        try{
         var days = Object.values(this.company.revenue).slice(-2)
         var change = days[0] - days[1]
+        }catch{var change=0}
         if (change >= 0) return html`<p style="color: rgb(8, 153, 129);">+${parseFloat(change).toPrecision(3)}</ p>`
         return html`<p style="color:rgb(247, 82, 95);">${parseFloat(change).toPrecision(3)}</ p>`
       }

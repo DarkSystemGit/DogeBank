@@ -1,11 +1,11 @@
 
 var handlers ={}
 function send(ws,msg){
-    console.log('Response to Message: '+msg)
+    //console.log('Response to Message: '+msg)
     ws.send(msg)
 }
 function handleMsg(obj){
-    console.log(obj.params)
+    //console.log(obj.params)
     return handlers[obj.type](...obj.params)
 }
 export var rpc ={
@@ -13,6 +13,7 @@ export var rpc ={
     create:server=>{
         //console.log(handlers)
         server.on('connection',ws=>{
+            console.log('recived connection!')
             ws.on('message',msg=>{
                 //console.log(this)
                 msg=JSON.parse(msg)
@@ -23,6 +24,7 @@ export var rpc ={
                 }else{
                     //console.log(JSON.stringify(handlers))
                     try {
+                        
                         send(ws,JSON.stringify({status:'ok',res:handleMsg(msg),id:msg.id}))
                     } catch (error) {
                         console.log(error)

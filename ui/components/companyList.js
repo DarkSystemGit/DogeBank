@@ -1,6 +1,5 @@
 import { LitElement, html } from "lit";
 import { importedStyle } from './util.js'
-import { CompanyItem } from "./companyItem.js";
 export class CompanyList extends LitElement {
     static properties = {
         comapnies: Array,
@@ -20,10 +19,9 @@ export class CompanyList extends LitElement {
 
         return html`
         ${importedStyle(document)}
-        ${this.companies.map((c)=>{new CompanyItem(c)})}
+        ${this.companies.map((c)=>{return html`<listitem-company .company=${c}></listitem-company>`})}
     `;
 
     }
-    red(){
-    }
+   
 }

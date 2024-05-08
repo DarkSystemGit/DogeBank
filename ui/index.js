@@ -6,6 +6,8 @@ import { CAccount } from "./components/createAccount";
 import { ErrPage } from "./components/404";
 import { Stock } from "./components/stock";
 import { Test } from "./components/test";
+import { CompanyItem } from "./components/companyItem";
+import { CompanyList } from "./components/companyList";
 customElements.define('nav-bar',Navbar)
 customElements.define('comp-stock',Stock)
 customElements.define('page-test',Test)
@@ -14,3 +16,5 @@ customElements.define('page-bank',Bank)
 customElements.define('page-account',Account)
 customElements.define('page-cuser',CAccount)
 customElements.define('page-404',ErrPage)
+customElements.define('listitem-company',CompanyItem)
+customElements.define('list-company',CompanyList)

@@ -1,7 +1,7 @@
 import { LitElement, html, css, render } from "lit";
 import { importedStyle, redirect } from "./util.js";
 import { RPC } from "../rpc.js";
-var guser
+var guser;
 export class Account extends LitElement {
     static styles = css`
         .pos {
@@ -77,9 +77,9 @@ export class Account extends LitElement {
                     </button>
                 </nav>
                 <div class="large-divider"></div>
-                <h2 class="center-align center">Your Comapnies</h2>
+                <h2 class="center-align center">Your Companies</h2>
                 <div class="padding"></div>
-                <h5 class="center center-align">No companies found</h5>
+                <div id="companies"></div>
                 
             </div>
         </article>`;
@@ -91,16 +91,23 @@ export class Account extends LitElement {
             parseInt(window.location.port),
             window.location.protocol == "https:",
         );
-        var user = (guser = await rpc.sendMsg(
+        var user = guser = await rpc.sendMsg(
             conn,
             "getUser",
             sessionStorage.getItem("session"),
-        ));
+        );
+        var companies=await rpc.sendMsg(
+            conn,
+            "getUserCompanies",
+            sessionStorage.getItem("session"),
+        );
         rpc.close(conn);
         var doc = this.shadowRoot.getElementById("body");
-
+        console.log(this.shadowRoot.getElementById("companies"))
+        var nocomps=html`<h5 id="companyText" class="center center-align">No companies found</h5>`
         doc.replaceChildren();
         render(this._template(user), doc);
+        render(html`<list-company .companies=${companies}></list-company>`,this.shadowRoot.getElementById("companies"))
     }
     async signout() {
         var rpc = new RPC();

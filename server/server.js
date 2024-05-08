@@ -8,13 +8,13 @@ var db = new data.Database(path.join(process.cwd(), 'main.db'));
 var sessions = db.db.sessions
 function on(msg, func) {
     if (!['login', 'createUser', 'getUser','editUser','signout'].includes(msg)) {
-        rpc.on(msg, (s) => { if (sessions[s]) func(...arguments) })
+        rpc.on(msg, function(s){ if (sessions[s]){ return func(...arguments) }else{ throw 'no session'}})
     } else {
         rpc.on(msg, func)
     }
 }
 var getUser = (session) => {
-    console.log(sessions[session],sessions)
+    //console.log(sessions[session],sessions)
     return db.getEntry('accounts.' + sessions[session])
 }
 var createUser = (name, password,  email,icon) => {
@@ -97,6 +97,13 @@ on('list', (s, type, amount) => {
 })
 on('getCompany', (s, name) => {
     return db.getEntry('companies.' + name)
+})
+on('getUserCompanies', (s) => {
+    
+    var user=getUser(s).name
+    console.log('ret',Object.values(db.db.companies).filter((e)=>Object.keys(e.stockholders).includes(user)))
+    var r=Object.values(db.db.companies).filter((e)=>Object.keys(e.stockholders).includes(user))
+    return r
 })
 on('addOwner', (s, company, user) => {
     var comp = new data.Company(db.getEntry(`companies.${company}`), db)
