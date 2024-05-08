@@ -27,10 +27,10 @@ export class Stock extends LitElement {
 
   constructor() {
     super();
-    //data takes the form {"year-month-day(yyyy-mm-dd)":price,...}
-    //details is the detailsPage
-    //company is an object like such {name:"companyName",value:Number,logo:"b64-encoded Image"}
-    this.data = this.data || {}
+    //Data takes the form {"year-month-day(yyyy-mm-dd)":price,...}
+    //Details is the detailsPage
+    //Company is an object like such {name:"companyName",value:Number,logo:"b64-encoded Image",revenue:Data}
+    this.data = this.company.revenue || {}
     this.details = this.details || "404"
   }
 

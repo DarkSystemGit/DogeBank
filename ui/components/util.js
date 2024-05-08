@@ -1,8 +1,10 @@
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 export function importedStyle(document){
     var style='';
-        Array.from(document.getElementsByTagName('link')).forEach(elm=>{
-            if(elm.getAttribute('rel')=="stylesheet"){style+=elm.outerHTML}
+    
+        Array.from(document.getElementsByTagName('link')).concat(Array.from(document.getElementsByTagName('style'))).forEach(elm=>{
+            console.log(elm)
+            if((elm.getAttribute('rel')=="stylesheet")||(elm.tagName=="STYLE")){style+=elm.outerHTML}
         })
         return unsafeHTML(style)
 }
@@ -21,6 +23,7 @@ export function promisify(func){
     return ()=>{return new Promise(func)}
 }
 export async function read(file){
+    try{
     const FR = new FileReader();
     
     var read=promisify((resolve)=>FR.addEventListener("load", function(evt) {
@@ -28,7 +31,7 @@ export async function read(file){
     })); 
       
     FR.readAsDataURL(file);
-    return await read()    
+    return await read()}catch{return undefined}    
 }
 export function awaitValue(condition){
     return new Promise((resolve, reject) => {

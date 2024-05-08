@@ -48,6 +48,7 @@ export class Database {
     }
     writeDB() {
         dbfile.write(this.file,this.db)
+        this.db=dbfile.read(this.file)
     }
     exists() {
         return !!this.loaded
@@ -135,7 +136,7 @@ export class Product {
             account.setBalance((this.product.cost * amount) * -1)
             var comp = new Company(this.db.getEntry(this.product.company), this.db)
             comp.addOrder({ id: this.product.id, amount })
-            comp.updateStock(this.product.cost * amount)
+            comp.updateValue(this.product.cost * amount)
             this.serialize()
             return true
         } return false
@@ -150,10 +151,11 @@ export class Product {
 }
 export class Company {
     constructor(company, database) {
-        this.company = company || { name: '', stockholders: {}, products: {}, stockPrice: 0 }
+        this.company = company || { name: '', stockholders: {}, products: {}, value: 0 }
         this.db = database
         this.company.orders = [] || this.company.orders
         this.company.stocks = this.company.stocks || 0
+        this.company.revenue=this.company.revenue||{[new Date().toJSON().split('T')[0]]:0}
         this.serialize()
     }
     createProduct(product) {
@@ -161,28 +163,25 @@ export class Company {
         new Product(product, this.db)
         this.company.products[product.name] = `\${products.${product.name}}`
     }
-    updateStock(price) {
-        this.company.stockPrice += price
-    }
     buyStock(account, amount) {
-        var price = this.company.stockPrice / this.company.stocks
+        var price = this.company.value / this.company.stocks
         account.account.payments.push({ company: this.company.name, amount: price * -1, status: account.account.balance >= price })
         if (account.account.balance >= price) {
             account.account.stocks.push(this.company.name)
             account.setBalance((price * amount) * -1)
             this.company.stocks += amount
-            this.company.stocksPrice += price * amount
+            this.updateValue(price * amount)
             this.serialize()
             return true
         } return false
     }
     sellStock(account, amount) {
-        var price = this.company.stockPrice / (this.company.stocks - amount)
+        var price = this.company.value / (this.company.stocks - amount)
         account.account.payments.push({ company: this.company.name, amount: price, status: account.account.stocks.includes(this.company.name) })
         if (account.account.stocks.includes(this.company.name)) {
             account.setBalance((price * amount))
             this.company.stocks -= amount
-            this.company.stocksPrice -= price * amount
+            this.updateValue((price * amount)*-1)
             this.serialize()
             return true
         } return false
@@ -202,5 +201,11 @@ export class Company {
     }
     serialize() {
         this.db.create('companies.' + this.company.name, this.company)
+    }
+    updateValue(value){
+        this.company.value=value
+        if((!this.company.revenue[new Date().toJSON().split('T')[0]])||(this.company.revenue[new Date().toJSON().split('T')[0]]<value)){
+            this.company.revenue[new Date().toJSON().split('T')[0]]=value
+        }
     }
 }
