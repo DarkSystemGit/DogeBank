@@ -108,6 +108,7 @@ export class Account extends LitElement {
         doc.replaceChildren();
         render(this._template(user), doc);
         render(html`<list-company .companies=${companies}></list-company>`,this.shadowRoot.getElementById("companies"))
+        if(companies==[])render(nocomps,this.shadowRoot.getElementById("companies"))
     }
     async signout() {
         var rpc = new RPC();
