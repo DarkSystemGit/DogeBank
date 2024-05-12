@@ -17,18 +17,24 @@ export class CompanyItem extends LitElement {
     render() {
         return html`
             ${importedStyle(document)}
-            <a class="round row padding surface-container wave">
+            <a class="round row padding surface-container wave" @click="${this.modal}">
                 <img class="round" src="${this.company.logo}" />
                 <div class="max">
                     <h6 class="small">${this.company.name}</h6>
                     <div>${this.change()}</div>
                 </div>
-                <i @click="${this.modal}">edit</i>
+                <i>edit</i>
             </a>
+            <comp-modal .confirm=${this.editCompany} .nav=${true} .cancel="${this.modal}" id="modal">
+
+            </comp-modal>
         `;
     }
     modal(){
-
+        (this.shadowRoot.querySelector('comp-modal')||this).toggle()
+    }
+    async editCompany(form){
+        console.log(form)
     }
     change() {
         try{

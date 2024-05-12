@@ -3,7 +3,8 @@
         "Jim": "${accounts.Jim.login}",
         "Bob": "${accounts.Bob.login}",
         "John Doe": "${accounts.John Doe.login}",
-        "bob": "${accounts.bob.login}"
+        "bob": "${accounts.bob.login}",
+        "eliasbalde": "${accounts.eliasbalde.login}"
     },
     "accounts": {
         "Jim": {
@@ -31,7 +32,20 @@
                 "2e6d1047edab4b04b6f40d1460458d04",
                 "afd9791ce037482ebff867d7f75eeb1c",
                 "12194c94530b41849bcf0be05f566a45",
-                "e4fadab7cecd42668d7f7d7efed53daa"
+                "e4fadab7cecd42668d7f7d7efed53daa",
+                "a29b7d09b77d4c2db11886b4fffb7863",
+                "5e42b1912a5d47449065f577508ae6e2",
+                "fd8b0f3cab474c61b70b6fbc303142ef",
+                "d3611d4cebd246e6927a4ef9b25a336d",
+                "f094b23931c741518148d818f2149171",
+                "7e712962b827441fa1dac79ddc483dfe",
+                "f450fe64084047b6b2ba86e1c949d70a",
+                "9356baa62de041b3ba779708091f55f2",
+                "685873679cb446cd9e3138e3e2140580",
+                "66354d39b3df4b6388d275ab970a5348",
+                "1bf45b0114804ed695b395dec34c18a2",
+                "558da637e4f247b69cd9e9e97068fc2f",
+                "7aab7c27ba2549639342f364343b1241"
             ],
             "login": "ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f",
             "email": "jim@example.com",
@@ -73,6 +87,17 @@
             "sessions": [],
             "login": "1f40fc92da241694750979ee6cf582f2d5d7d28e18335de05abc54d0560e0f5302860c652bf08d560252aa5e74210546f369fbbbce8c12cfc7957b2652fe9a75",
             "email": "a",
+            "cart": {},
+            "stocks": [],
+            "payments": []
+        },
+        "eliasbalde": {
+            "name": "eliasbalde",
+            "icon": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjMxIiBoZWlnaHQ9IjIzMSIgdmlld0JveD0iMCAwIDIzMSAyMzEiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjExNS41IiBjeT0iMTE1LjUiIHI9IjExNS41IiBmaWxsPSJ1cmwoI3BhaW50MF9saW5lYXJfMl84KSIvPgo8Y2lyY2xlIGN4PSIxMTUuNSIgY3k9IjExNS41IiByPSIxMTUuNSIgZmlsbD0id2hpdGUiLz4KPGNpcmNsZSBjeD0iMTE1LjUiIGN5PSIxMTUuNSIgcj0iMTE1LjUiIGZpbGw9IiMwNTlFRjQiIGZpbGwtb3BhY2l0eT0iMC41NyIvPgo8Y2lyY2xlIGN4PSIxMTUuNSIgY3k9Ijc4LjUiIHI9IjUzLjUiIGZpbGw9IiMwNTlFRjQiIGZpbGwtb3BhY2l0eT0iMC44Ii8+CjxjaXJjbGUgY3g9IjExNS41IiBjeT0iNzguNSIgcj0iNTMuNSIgZmlsbD0idXJsKCNwYWludDFfbGluZWFyXzJfOCkiIGZpbGwtb3BhY2l0eT0iMC44Ii8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNDMgMjA1LjA0QzQ3LjQyMjYgMTY4LjM5NiA3OC42MjY3IDE0MCAxMTYuNDYzIDE0MEMxNTQuMDQyIDE0MCAxODUuMDc5IDE2OC4wMTEgMTg5LjgzMiAyMDQuMjkzQzE2OS44MDkgMjIwLjk2OSAxNDQuMDU4IDIzMSAxMTUuOTYzIDIzMUM4OC4yOTA1IDIzMSA2Mi44OTA5IDIyMS4yNjggNDMgMjA1LjA0WiIgZmlsbD0iIzA1OUVGNCIgZmlsbC1vcGFjaXR5PSIwLjgiLz4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik00MyAyMDUuMDRDNDcuNDIyNiAxNjguMzk2IDc4LjYyNjcgMTQwIDExNi40NjMgMTQwQzE1NC4wNDIgMTQwIDE4NS4wNzkgMTY4LjAxMSAxODkuODMyIDIwNC4yOTNDMTY5LjgwOSAyMjAuOTY5IDE0NC4wNTggMjMxIDExNS45NjMgMjMxQzg4LjI5MDUgMjMxIDYyLjg5MDkgMjIxLjI2OCA0MyAyMDUuMDRaIiBmaWxsPSJ1cmwoI3BhaW50Ml9saW5lYXJfMl84KSIgZmlsbC1vcGFjaXR5PSIwLjgiLz4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhcl8yXzgiIHgxPSIxMTUuNSIgeTE9IjAiIHgyPSIxMTUuNSIgeTI9IjIzMSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSJ3aGl0ZSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNDOUM4QzgiIHN0b3Atb3BhY2l0eT0iMC45OSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MV9saW5lYXJfMl84IiB4MT0iMTE1LjUiIHkxPSIyNSIgeDI9IjExNS41IiB5Mj0iMTMyIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiMwNTlFRjQiLz4KPHN0b3Agb2Zmc2V0PSIwLjk5OTgiIHN0b3AtY29sb3I9IiMwNTg2Q0UiIHN0b3Atb3BhY2l0eT0iMC45MiIvPgo8c3RvcCBvZmZzZXQ9IjAuOTk5OSIgc3RvcC1jb2xvcj0iIzA1OUVGNCIgc3RvcC1vcGFjaXR5PSIwLjAxNTYyNSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwNTlFRjQiIHN0b3Atb3BhY2l0eT0iMCIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwNTg2Q0UiIHN0b3Atb3BhY2l0eT0iMC45NSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50Ml9saW5lYXJfMl84IiB4MT0iMTE2LjQxNiIgeTE9IjE0MCIgeDI9IjExNi40MTYiIHkyPSIyMzEiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzA1OUVGNCIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwNTg2Q0UiIHN0b3Atb3BhY2l0eT0iMC45NSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPgo=",
+            "balance": 0,
+            "sessions": [],
+            "login": "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2",
+            "email": "eliasbalde@yahoo.com",
             "cart": {},
             "stocks": [],
             "payments": []
@@ -155,6 +180,19 @@
         "0dc72c5b025942af8b64a2bcc0d683e8": "Bob",
         "846f77d2ea5a49a58117e3b1f7a3b080": "Bob",
         "5714faa919914f6381a7526a2dc454c2": "Bob",
-        "e4fadab7cecd42668d7f7d7efed53daa": "Jim"
+        "e4fadab7cecd42668d7f7d7efed53daa": "Jim",
+        "a29b7d09b77d4c2db11886b4fffb7863": "Jim",
+        "5e42b1912a5d47449065f577508ae6e2": "Jim",
+        "fd8b0f3cab474c61b70b6fbc303142ef": "Jim",
+        "d3611d4cebd246e6927a4ef9b25a336d": "Jim",
+        "f094b23931c741518148d818f2149171": "Jim",
+        "7e712962b827441fa1dac79ddc483dfe": "Jim",
+        "f450fe64084047b6b2ba86e1c949d70a": "Jim",
+        "9356baa62de041b3ba779708091f55f2": "Jim",
+        "685873679cb446cd9e3138e3e2140580": "Jim",
+        "66354d39b3df4b6388d275ab970a5348": "Jim",
+        "1bf45b0114804ed695b395dec34c18a2": "Jim",
+        "558da637e4f247b69cd9e9e97068fc2f": "Jim",
+        "7aab7c27ba2549639342f364343b1241": "Jim"
     }
 }

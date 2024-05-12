@@ -8,8 +8,10 @@ import { Stock } from "./components/stock";
 import { Test } from "./components/test";
 import { CompanyItem } from "./components/companyItem";
 import { CompanyList } from "./components/companyList";
+import { Modal } from "./components/modal";
 customElements.define('nav-bar',Navbar)
 customElements.define('comp-stock',Stock)
+customElements.define('comp-modal',Modal)
 customElements.define('page-test',Test)
 customElements.define('page-login',Login)
 customElements.define('page-bank',Bank)
