@@ -49,7 +49,9 @@ export class Modal extends LitElement {
     }
     toggle() {
         if(!this.togglec){document.querySelector('dialog').showModal();this.togglec=1;return}
+
         document.querySelector('dialog').close();
+        this.togglec=0
     }
 
 }
