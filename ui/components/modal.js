@@ -11,10 +11,11 @@ export class Modal extends LitElement {
 
     constructor() {
         super();
-
+        this.init=1
 
     }
     modal() {
+        if(this.init==0)return
         var children = this.shadowRoot.querySelector('slot').assignedNodes({ flatten: true });
         var i= document.createElement('div')
         var c=document.createElement('div')
@@ -35,6 +36,7 @@ export class Modal extends LitElement {
           
         document.body.appendChild(i)
         this.innerNodes=()=>document.getElementById('modal-'+id)
+        this.init=0
     }
     // Render the UI as a function of component state
     render() {

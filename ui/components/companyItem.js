@@ -110,7 +110,7 @@ export class CompanyItem extends LitElement {
         var file=await read(t.target.files[0])
         var modal=this.shadowRoot.querySelector("comp-modal").innerNodes()
         this.company.logo=file
-        modal.querySelector('img').src=file
+        modal.querySelector('#prof').src=file
     }
     change() {
         try {
