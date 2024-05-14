@@ -18,9 +18,10 @@ export class Modal extends LitElement {
         var children = this.shadowRoot.querySelector('slot').assignedNodes({ flatten: true });
         var i= document.createElement('div')
         var c=document.createElement('div')
+        var id=this.id=(Math.random() + 1).toString(36).substring(7);
         c.append(...children)
-        if(document.getElementById('modal'))document.getElementById('modal').parentElement.remove()
-        i.innerHTML=`<dialog class="modal" style="height:100%;width:95%;">
+        if(document.getElementById('modal-'+id))document.getElementById('modal-'+id).parentElement.remove()
+        i.innerHTML=`<dialog class="modal" style="height:100%;width:95%;" id="modal-${id}">
             <div id="c"></div>
             ${this.nav? `<nav class="right-align no-space">
               <button class="transparent link" id="nc">Cancel</button>
@@ -31,8 +32,9 @@ export class Modal extends LitElement {
           i.querySelector('#c').replaceWith(c)
           i.querySelector('#yc').addEventListener('click',(e)=>{this.confirm(this)})
           i.querySelector('#nc').addEventListener('click',(e)=>{this.cancel(this)})
+          
         document.body.appendChild(i)
-
+        this.innerNodes=()=>document.getElementById('modal-'+id)
     }
     // Render the UI as a function of component state
     render() {
@@ -45,12 +47,12 @@ export class Modal extends LitElement {
     }
     update(){
         super.update()
-        this.modal()
+        //this.modal()
     }
     toggle() {
-        if(!this.togglec){document.querySelector('dialog').showModal();this.togglec=1;return}
+        if(!this.togglec){document.querySelector('#modal-'+this.id).showModal();this.togglec=1;return}
 
-        document.querySelector('dialog').close();
+        document.querySelector('#modal-'+this.id).close();
         this.togglec=0
     }
 

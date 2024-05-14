@@ -96,13 +96,21 @@ on('list', (s, type, amount) => {
     return res
 })
 on('getCompany', (s, name) => {
-    return db.getEntry('companies.' + name)
+    var company=db.getEntry('companies.' + name)
+    Object.keys(company.stockholders).forEach((user)=>{
+        company.stockholders[user]=db.getEntry('companies.' + name+'.stockholders.'+user)
+    })
+    return company
 })
 on('getUserCompanies', (s) => {
     
     var user=getUser(s).name
-    console.log('ret',Object.values(db.db.companies).filter((e)=>Object.keys(e.stockholders).includes(user)))
     var r=Object.values(db.db.companies).filter((e)=>Object.keys(e.stockholders).includes(user))
+    r.forEach((company)=>{
+        Object.keys(company.stockholders).forEach((owner)=>{
+            company.stockholders[user]=db.getEntry('companies.' + company.name+'.stockholders.'+owner)
+        })
+    })
     return r
 })
 on('addOwner', (s, company, user) => {

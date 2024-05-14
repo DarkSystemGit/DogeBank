@@ -1,5 +1,5 @@
-import { LitElement, html } from "lit";
-import { importedStyle, redirect } from "./util.js";
+import { LitElement, html, render } from "lit";
+import { importedStyle, redirect,read } from "./util.js";
 export class CompanyItem extends LitElement {
     static properties = {
         company: Object,
@@ -35,6 +35,13 @@ export class CompanyItem extends LitElement {
                 id="modal"
             >
                 <h4 class="center">Edit ${this.company.name}</h4>
+                <img
+                    class="circle extra center"
+                    id="prof"
+                    alt="logo"
+                    src=${this.company.logo}
+                    style="width:12.5%;height:12.5%;"
+                />
                 <div class="field label border round jsinput" id="jun">
                     <input
                         type="text"
@@ -54,8 +61,32 @@ export class CompanyItem extends LitElement {
                     >
                         <i>attach_file</i>
                         <span>Upload Logo</span>
-                        <input type="file" />
+                        <input type="file" @change="${this.logo}" accept="image/*"/>
                     </button>
+                </div>
+                <div style="padding-top: 1%;">
+                    <div style="display: flex;inset-inline-start: 1rem;">
+                        <label style="padding-top: .5vh;font-size: 1rem;"
+                            >Owners</label
+                        >
+                        <button class="circle small">
+                            <i>add</i>
+                        </button>
+                    </div>
+
+                    <div style="padding-top: 1%;padding-left: .5%;">
+                        ${Object.values(this.company.stockholders).map(
+                            (owner) =>
+                                html`<a
+                                    class="chip fill round small-elevate"
+                                    @click=${this.remove}
+                                >
+                                    <img src="${owner.icon}" />
+                                    <span>${owner.name}</span>
+                                    <i>close</i>
+                                </a>`,
+                        )}
+                    </div>
                 </div>
             </comp-modal>
         `;
@@ -65,6 +96,21 @@ export class CompanyItem extends LitElement {
     }
     async editCompany(form) {
         console.log(form);
+    }
+    remove(t) {
+        if (Object.keys(this.company.stockholders).length != 1) {
+            var elm = t.target;
+            var name = elm.querySelector("span").innerText;
+            delete this.company.stockholders[name];
+            this.shadowRoot.replaceChildren();
+            render(this.render(), this.shadowRoot);
+        }
+    }
+    async logo(t){
+        var file=await read(t.target.files[0])
+        var modal=this.shadowRoot.querySelector("comp-modal").innerNodes()
+        this.company.logo=file
+        modal.querySelector('img').src=file
     }
     change() {
         try {
