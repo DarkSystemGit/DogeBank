@@ -122,6 +122,7 @@ export class CompanyItem extends LitElement {
             var elm = t.target;
             var name = elm.querySelector("span").innerText;
             this._stockholders=this._stockholders.filter(item => item !== name)
+            this.shadowRoot.querySelector("comp-modal").innerNodes().querySelector('#comps').replaceChildren()
             render(html`${Object.values(getObjItems(this._stockholders,this.company.stockholders)).map(
                 (owner) =>
                     html`<a
@@ -164,8 +165,17 @@ export class CompanyItem extends LitElement {
             var elm=e.target.value
             this._stockholders.push(elm)
             close()
-            this.shadowRoot.innerHTML=""
-            render(this.render(), this.shadowRoot);
+            render(html`${Object.values(getObjItems(this._stockholders,this.company.stockholders)).map(
+                (owner) =>
+                    html`<a
+                        class="chip fill round small-elevate"
+                        @click=${this.remove}
+                    >
+                        <img src="${owner.icon}" />
+                        <span>${owner.name}</span>
+                        <i>close</i>
+                    </a>`,
+            )}`,this.shadowRoot.querySelector("comp-modal").innerNodes().querySelector('#comps'))
         }
         render(html`<article style="width: 14vw;margin-top: 1vh;display: flex;left: .5vw;" id="ownerAdder">
         <div class="field label border small round fill" style="left: .5%;margin-bottom: 0%;">
