@@ -1,15 +1,25 @@
 import { LitElement, html, render } from "lit";
-import { importedStyle, redirect,read } from "./util.js";
+import { importedStyle, redirect, read } from "./util.js";
+import { RPC } from "../rpc.js";
+function getObjItems(items,obj){
+    var r={}
+    items=Object.keys(obj).filter(s=>items.includes(s))
+    items.forEach((i)=>{r[i]=obj[i]})
+    return r
+}
 export class CompanyItem extends LitElement {
     static properties = {
-        company: Object,
+        company: {type:Object,reflect:true},
     };
 
     constructor() {
         super();
-        //Company is an object like such {name:"companyName",value:Number,logo:"b64-encoded Image",revenue:Data}
+        //Company is an object like such {name:"companyName",value:Number,logo:"b64-encoded Image",revenue:Data,stockholders:{"OwnerName":Object}}
         //Data takes the form {"year-month-day(yyyy-mm-dd)":price,...}
         this.company = this.company || {};
+        this._stockholders=this.company.stockholders||[]
+        console.log(this.company.stockholders,Object.keys(this.company.stockholders))
+        if(this.company.stockholders)this._stockholders=Object.keys(this.company.stockholders)
         this.data = this.company.revenue || {};
     }
 
@@ -45,7 +55,7 @@ export class CompanyItem extends LitElement {
                 <div class="field label border round jsinput" id="jun">
                     <input
                         type="text"
-                        id="name"
+                        id="nameInput"
                         value="${this.company.name}"
                         placeholder=" "
                     />
@@ -61,7 +71,11 @@ export class CompanyItem extends LitElement {
                     >
                         <i>attach_file</i>
                         <span>Upload Logo</span>
-                        <input type="file" @change="${this.logo}" accept="image/*"/>
+                        <input
+                            type="file"
+                            @change="${this.logo}"
+                            accept="image/*"
+                        />
                     </button>
                 </div>
                 <div style="padding-top: 1%;">
@@ -69,13 +83,13 @@ export class CompanyItem extends LitElement {
                         <label style="padding-top: .5vh;font-size: 1rem;"
                             >Owners</label
                         >
-                        <button class="circle small">
+                        <button class="circle small" @click="${this.addOwner}">
                             <i>add</i>
                         </button>
                     </div>
-
+                    <div id="ownerAdder"></div>
                     <div style="padding-top: 1%;padding-left: .5%;">
-                        ${Object.values(this.company.stockholders).map(
+                        ${Object.values(getObjItems(this._stockholders,this.company.stockholders)).map(
                             (owner) =>
                                 html`<a
                                     class="chip fill round small-elevate"
@@ -94,23 +108,27 @@ export class CompanyItem extends LitElement {
     modal() {
         (this.shadowRoot.querySelector("comp-modal") || this).toggle();
     }
-    async editCompany(form) {
-        console.log(form);
+    async editCompany(t) {
+        var form=t.innerNodes()
+        var name=form.querySelector('#nameInput')
+        var logo=this.company.logo
+        var stockholders=this._stockholders
+        console.table({logo,name,stockholders})
     }
     remove(t) {
         if (Object.keys(this.company.stockholders).length != 1) {
             var elm = t.target;
             var name = elm.querySelector("span").innerText;
-            delete this.company.stockholders[name];
+            this._stockholders=this._stockholders.filter(item => item !== name)
             this.shadowRoot.replaceChildren();
             render(this.render(), this.shadowRoot);
         }
     }
-    async logo(t){
-        var file=await read(t.target.files[0])
-        var modal=this.shadowRoot.querySelector("comp-modal").innerNodes()
-        this.company.logo=file
-        modal.querySelector('#prof').src=file
+    async logo(t) {
+        var file = await read(t.target.files[0]);
+        var modal = this.shadowRoot.querySelector("comp-modal").innerNodes();
+        this.company.logo = file;
+        modal.querySelector("#prof").src = file;
     }
     change() {
         try {
@@ -119,12 +137,33 @@ export class CompanyItem extends LitElement {
         } catch {
             var change = 0;
         }
-        if (change >= 0)
+        if(!Number.isFinite(change))change=0
+        if (change >0)
             return html`<p style="color: rgb(8, 153, 129);">
                 +${parseFloat(change).toPrecision(3)}
             </p>`;
         return html`<p style="color:rgb(247, 82, 95);">
             ${parseFloat(change).toPrecision(3)}
         </p>`;
+    }
+    addOwner() {
+        var close=()=>{this.shadowRoot.querySelector("comp-modal").innerNodes().querySelector('#ownerAdder').replaceWith((()=>{var d=document.createElement('div');d.id="ownerAdder";return d})())}
+        var addOwner=async (e)=>{
+            if(e.key!="Enter")return
+            var elm=e.target.value
+            this._stockholders.push(elm)
+            close()
+            this.shadowRoot.innerHTML=""
+            render(this.render(), this.shadowRoot);
+        }
+        render(html`<article style="width: 14vw;margin-top: 1vh;display: flex;left: .5vw;" id="ownerAdder">
+        <div class="field label border small round fill" style="left: .5%;margin-bottom: 0%;">
+            <input type="text" placeholder=" " style="" @keypress="${addOwner}">
+            <label>Name</label>
+        </div>
+        <button class="circle error" @click="${close}">
+            <i>close</i>
+        </button>
+    </article>`,this.shadowRoot.querySelector("comp-modal").innerNodes().querySelector("#ownerAdder"));
     }
 }

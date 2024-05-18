@@ -47,9 +47,9 @@ on('login', (name, login) => {
 })
 on('signout', (session) => {
     var user = new data.Account(getUser(session), db)
-    user.account.sessions=user.account.sessions.filter(e => e !== session)
+    user.account.sessions=[]
     user.serialize()
-    delete sessions[session]
+    Object.values(sessions).forEach((u,i)=>{if(u==user.name)delete sessions[Object.keys(sessions)[i]]})
     db.writeDB()
 })
 on('createCompany', (s, name, users, logo) => {
@@ -107,15 +107,19 @@ on('getUserCompanies', (s) => {
     var user=getUser(s).name
     var r=Object.values(db.db.companies).filter((e)=>Object.keys(e.stockholders).includes(user))
     r.forEach((company)=>{
-        Object.keys(company.stockholders).forEach((owner)=>{
-            company.stockholders[user]=db.getEntry('companies.' + company.name+'.stockholders.'+owner)
+        (Object.keys(company.stockholders)).forEach((owner)=>{
+            owner=JSON.parse(JSON.stringify(db.getEntry('companies.' + company.name+'.stockholders.'+owner)))
+            owner.login=''
+            company.stockholders[owner.name]=owner
         })
     })
     return r
 })
 on('addOwner', (s, company, user) => {
     var comp = new data.Company(db.getEntry(`companies.${company}`), db)
+    console.log(comp)
     comp.addOwner(new data.Account(db.getEntry(`accounts.${user}`), db))
+    comp.serialize()
 })
 on('editCompany',(s,name,logo)=>{
     var comp = new data.Company(db.getEntry('companies.' + name), db)

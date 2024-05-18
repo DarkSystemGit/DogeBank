@@ -187,8 +187,9 @@ export class Company {
         } return false
     }
     addOwner(account) {
-        this.db.createLink('companies.' + this.company.name + '.stockholders.' + account.account.name, 'accounts.' + account.account.name)
-        this.buyStock(account, 1)
+        this.serialize()
+        this.db.createLink('companies.' + this.company.name + '.stockholders.' + account.account.name,'accounts.' + account.account.name)
+        this.company=this.db.getEntry(`companies.${this.company.name}`)
         this.serialize()
     }
     addOrder(obj) {

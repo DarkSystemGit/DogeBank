@@ -18,7 +18,7 @@ export var rpc ={
                 //console.log(this)
                 msg=JSON.parse(msg)
                 
-                console.log('New message recived: '+JSON.stringify(msg.type))
+                if(msg.type!="getUser")console.log('New message recived: '+JSON.stringify(msg.type))
                 if(msg.type == '__init'){
                     send(ws,JSON.stringify({pid:new Date().getTime(),id:msg.id}))
                 }else{

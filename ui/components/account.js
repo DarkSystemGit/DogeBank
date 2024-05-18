@@ -103,11 +103,11 @@ export class Account extends LitElement {
         );
         rpc.close(conn);
         var doc = this.shadowRoot.getElementById("body");
-        console.log(this.shadowRoot.getElementById("companies"))
+        console.log(companies)
         var nocomps=html`<h5 id="companyText" class="center center-align">No companies found</h5>`
         doc.replaceChildren();
         render(this._template(user), doc);
-        render(html`<list-company .companies=${companies}></list-company>`,this.shadowRoot.getElementById("companies"))
+        render(html`${companies.map((c)=>{return html`<listitem-company .company=${c}></listitem-company>`})}`,this.shadowRoot.getElementById("companies"))
         if(companies==[])render(nocomps,this.shadowRoot.getElementById("companies"))
     }
     async signout() {

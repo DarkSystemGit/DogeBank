@@ -1,9 +1,7 @@
 import { LitElement, html } from "lit";
 import { importedStyle } from './util.js'
 export class CompanyList extends LitElement {
-    static properties = {
-        comapnies: Array,
-    };
+    
 
 
     constructor() {
