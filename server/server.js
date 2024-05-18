@@ -26,6 +26,11 @@ on('createUser', createUser)
 on('editUser', function(s,name, password,  email,icon){
     if (sessions[s])createUser(name, password,  email,icon)
 })
+on('getUserByName',(s,name)=>{
+    var user=JSON.parse(JSON.stringify(db.getEntry('accounts.' + name)))
+    user.login=''
+    return user
+})
 on('removeUser', (s, name) => {
     db.remove(`accounts.${name}`)
 })

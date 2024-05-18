@@ -1,11 +1,11 @@
 import { LitElement, html, render } from "lit";
 import { importedStyle, redirect, read } from "./util.js";
 import { RPC } from "../rpc.js";
-function getObjItems(items,obj){
+function getObjItems(items, obj) {
     console.log(obj)
-    var r={}
-    items=Object.keys(obj).filter(s=>items.includes(s))
-    items.forEach((i)=>{r[i]=obj[i]})
+    var r = {}
+    items = Object.keys(obj).filter(s => items.includes(s))
+    items.forEach((i) => { r[i] = obj[i] })
     return r
 }
 export class CompanyItem extends LitElement {
@@ -18,15 +18,15 @@ export class CompanyItem extends LitElement {
         //Company is an object like such {name:"companyName",value:Number,logo:"b64-encoded Image",revenue:Data,stockholders:{"OwnerName":Object}}
         //Data takes the form {"year-month-day(yyyy-mm-dd)":price,...}
         this.company = this.company || {};
-        this._stockholders=this.company.stockholders||[]
-        console.log(this.company.stockholders,this.company)
-        if(this.company.stockholders)this._stockholders=Object.keys(this.company.stockholders)
+        this.ownerObjs = this.company.stockholders
+        this._stockholders = []
         this.data = this.company.revenue || {};
     }
 
     // Render the UI as a function of component state
     render() {
-        if(this._stockholders.length==0)this._stockholders=Object.keys(this.company.stockholders)||[]
+        this.ownerObjs = this.ownerObjs || this.company.stockholders
+        if (this._stockholders.length == 0) this._stockholders = Object.keys(this.company.stockholders) || []
         return html`
             ${importedStyle(document)}
             <a
@@ -91,9 +91,9 @@ export class CompanyItem extends LitElement {
                     </div>
                     <div id="ownerAdder"></div>
                     <div style="padding-top: 1%;padding-left: .5%;" id="comps">
-                        ${Object.values(getObjItems(this._stockholders,this.company.stockholders)).map(
-                            (owner) =>
-                                html`<a
+                        ${Object.values(getObjItems(this._stockholders, this.ownerObjs)).map(
+            (owner) =>
+                html`<a
                                     class="chip fill round small-elevate"
                                     @click=${this.remove}
                                 >
@@ -101,7 +101,7 @@ export class CompanyItem extends LitElement {
                                     <span>${owner.name}</span>
                                     <i>close</i>
                                 </a>`,
-                        )}
+        )}
                     </div>
                 </div>
             </comp-modal>
@@ -111,19 +111,19 @@ export class CompanyItem extends LitElement {
         (this.shadowRoot.querySelector("comp-modal") || this).toggle();
     }
     async editCompany(t) {
-        var form=t.innerNodes()
-        var name=form.querySelector('#nameInput')
-        var logo=this.company.logo
-        var stockholders=this._stockholders
-        console.table({logo,name,stockholders})
+        var form = t.innerNodes()
+        var name = form.querySelector('#nameInput')
+        var logo = this.company.logo
+        var stockholders = this._stockholders
+        console.table({ logo, name, stockholders })
     }
     remove(t) {
-        if (Object.keys(this.company.stockholders).length != 1) {
+        if (this._stockholders.length != 1) {
             var elm = t.target;
             var name = elm.querySelector("span").innerText;
-            this._stockholders=this._stockholders.filter(item => item !== name)
+            this._stockholders = this._stockholders.filter(item => item !== name)
             this.shadowRoot.querySelector("comp-modal").innerNodes().querySelector('#comps').replaceChildren()
-            render(html`${Object.values(getObjItems(this._stockholders,this.company.stockholders)).map(
+            render(html`${Object.values(getObjItems(this._stockholders, this.ownerObjs)).map(
                 (owner) =>
                     html`<a
                         class="chip fill round small-elevate"
@@ -133,7 +133,7 @@ export class CompanyItem extends LitElement {
                         <span>${owner.name}</span>
                         <i>close</i>
                     </a>`,
-            )}`,this.shadowRoot.querySelector("comp-modal").innerNodes().querySelector('#comps'))
+            )}`, this.shadowRoot.querySelector("comp-modal").innerNodes().querySelector('#comps'))
         }
     }
     async logo(t) {
@@ -149,8 +149,8 @@ export class CompanyItem extends LitElement {
         } catch {
             var change = 0;
         }
-        if(!Number.isFinite(change))change=0
-        if (change >0)
+        if (!Number.isFinite(change)) change = 0
+        if (change > 0)
             return html`<p style="color: rgb(8, 153, 129);">
                 +${parseFloat(change).toPrecision(3)}
             </p>`;
@@ -159,13 +159,22 @@ export class CompanyItem extends LitElement {
         </p>`;
     }
     addOwner() {
-        var close=()=>{this.shadowRoot.querySelector("comp-modal").innerNodes().querySelector('#ownerAdder').replaceWith((()=>{var d=document.createElement('div');d.id="ownerAdder";return d})())}
-        var addOwner=async (e)=>{
-            if(e.key!="Enter")return
-            var elm=e.target.value
+        var close = () => { this.shadowRoot.querySelector("comp-modal").innerNodes().querySelector('#ownerAdder').replaceWith((() => { var d = document.createElement('div'); d.id = "ownerAdder"; return d })()) }
+        var addOwner = async (e) => {
+            if (e.key != "Enter") return
+            var elm = e.target.value
+            var rpc = new RPC();
+            var conn = await rpc.createChannel(
+                window.location.hostname,
+                parseInt(window.location.port),
+                window.location.protocol == "https:",
+            );
+            var user=await rpc.sendMsg(conn, 'getUserByName', )
+            rpc.close(conn);
             this._stockholders.push(elm)
             close()
-            render(html`${Object.values(getObjItems(this._stockholders,this.company.stockholders)).map(
+            this.shadowRoot.querySelector("comp-modal").innerNodes().querySelector('#comps').replaceChildren()
+            render(html`${Object.values(getObjItems(this._stockholders, this.ownerObjs)).map(
                 (owner) =>
                     html`<a
                         class="chip fill round small-elevate"
@@ -175,7 +184,7 @@ export class CompanyItem extends LitElement {
                         <span>${owner.name}</span>
                         <i>close</i>
                     </a>`,
-            )}`,this.shadowRoot.querySelector("comp-modal").innerNodes().querySelector('#comps'))
+            )}`, this.shadowRoot.querySelector("comp-modal").innerNodes().querySelector('#comps'))
         }
         render(html`<article style="width: 14vw;margin-top: 1vh;display: flex;left: .5vw;" id="ownerAdder">
         <div class="field label border small round fill" style="left: .5%;margin-bottom: 0%;">
@@ -185,6 +194,6 @@ export class CompanyItem extends LitElement {
         <button class="circle error" @click="${close}">
             <i>close</i>
         </button>
-    </article>`,this.shadowRoot.querySelector("comp-modal").innerNodes().querySelector("#ownerAdder"));
+    </article>`, this.shadowRoot.querySelector("comp-modal").innerNodes().querySelector("#ownerAdder"));
     }
 }
