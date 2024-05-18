@@ -2,6 +2,7 @@ import { LitElement, html, render } from "lit";
 import { importedStyle, redirect, read } from "./util.js";
 import { RPC } from "../rpc.js";
 function getObjItems(items,obj){
+    console.log(obj)
     var r={}
     items=Object.keys(obj).filter(s=>items.includes(s))
     items.forEach((i)=>{r[i]=obj[i]})
@@ -9,7 +10,7 @@ function getObjItems(items,obj){
 }
 export class CompanyItem extends LitElement {
     static properties = {
-        company: {type:Object,reflect:true},
+        //company: {type:Object,reflect:true},
     };
 
     constructor() {
@@ -18,13 +19,14 @@ export class CompanyItem extends LitElement {
         //Data takes the form {"year-month-day(yyyy-mm-dd)":price,...}
         this.company = this.company || {};
         this._stockholders=this.company.stockholders||[]
-        console.log(this.company.stockholders,Object.keys(this.company.stockholders))
+        console.log(this.company.stockholders,this.company)
         if(this.company.stockholders)this._stockholders=Object.keys(this.company.stockholders)
         this.data = this.company.revenue || {};
     }
 
     // Render the UI as a function of component state
     render() {
+        if(this._stockholders.length==0)this._stockholders=Object.keys(this.company.stockholders)||[]
         return html`
             ${importedStyle(document)}
             <a
@@ -88,7 +90,7 @@ export class CompanyItem extends LitElement {
                         </button>
                     </div>
                     <div id="ownerAdder"></div>
-                    <div style="padding-top: 1%;padding-left: .5%;">
+                    <div style="padding-top: 1%;padding-left: .5%;" id="comps">
                         ${Object.values(getObjItems(this._stockholders,this.company.stockholders)).map(
                             (owner) =>
                                 html`<a
@@ -120,8 +122,17 @@ export class CompanyItem extends LitElement {
             var elm = t.target;
             var name = elm.querySelector("span").innerText;
             this._stockholders=this._stockholders.filter(item => item !== name)
-            this.shadowRoot.replaceChildren();
-            render(this.render(), this.shadowRoot);
+            render(html`${Object.values(getObjItems(this._stockholders,this.company.stockholders)).map(
+                (owner) =>
+                    html`<a
+                        class="chip fill round small-elevate"
+                        @click=${this.remove}
+                    >
+                        <img src="${owner.icon}" />
+                        <span>${owner.name}</span>
+                        <i>close</i>
+                    </a>`,
+            )}`,this.shadowRoot.querySelector("comp-modal").innerNodes().querySelector('#comps'))
         }
     }
     async logo(t) {
